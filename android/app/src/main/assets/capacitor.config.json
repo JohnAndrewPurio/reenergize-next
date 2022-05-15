@@ -1,0 +1,6 @@
+{
+	"appId": "com.energy.reenergize",
+	"appName": "reenergize-next",
+	"webDir": "out",
+	"bundledWebRuntime": false
+}
