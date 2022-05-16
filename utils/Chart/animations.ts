@@ -1,5 +1,3 @@
-import { DateTime } from "luxon";
-
 export const progressiveAnimation = (duration: number, delayBetweenPoints: number) => {
     const previousY = (ctx: any) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
     const animation: any = {

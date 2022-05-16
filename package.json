@@ -16,17 +16,20 @@
     "@ionic/core": "^6.0.11",
     "chart.js": "^3.7.1",
     "chartjs-adapter-luxon": "^1.1.0",
+    "dotenv": "^16.0.1",
     "ionicons": "^6.0.1",
     "luxon": "^2.4.0",
     "next": "12.1.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "suncalc": "^1.9.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^3.4.3",
     "@types/luxon": "^2.3.2",
     "@types/node": "17.0.21",
     "@types/react": "17.0.39",
+    "@types/suncalc": "^1.8.1",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
     "typescript": "4.6.2"

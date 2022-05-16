@@ -1,7 +1,7 @@
-import type { NextPage } from 'next'
-import { worldRadiationForecasts } from '../api/Solcast/constants'
+import { FC } from "react"
+import { worldRadiationForecasts } from "../../api/Solcast/constants"
 
-const Home: NextPage = () => {
+const DataSummary: FC = () => {
   return (
     <ion-list>
       <ion-list-header>Data Summary</ion-list-header>
@@ -18,4 +18,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default DataSummary
