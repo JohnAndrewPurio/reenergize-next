@@ -10,7 +10,6 @@ interface DataChartProps {
 
 const DataChart: FC<DataChartProps> = ({ labels, chartData }) => {
   useEffect(() => {
-
     const totalDuration = 2000;
     const delayBetweenPoints = totalDuration / labels.length;
 
