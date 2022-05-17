@@ -1,7 +1,7 @@
 import type { WorldRadiationEstimatesData, WorldRadiationForecastData } from "./constants"
 
 export const getWorldRadiationForecasts = async (baseUrl: string, latitude: number, longitude: number, hours?: number) => {
-    const url = new URL("/world_radiation/forecasts", baseUrl)
+    const url = new URL("/solcast/world_radiation/forecasts", baseUrl)
     const url_params = new URLSearchParams({
         latitude: String(latitude), 
         longitude: String(longitude)
@@ -23,7 +23,7 @@ export const getWorldRadiationForecasts = async (baseUrl: string, latitude: numb
 }
 
 export const getWorldRadiationEstimatedActuals = async (baseUrl: string, latitude: number, longitude: number, hours?: number) => {
-    const url = new URL("/world_radiation/estimated_actuals", baseUrl)
+    const url = new URL("/solcast/world_radiation/estimated_actuals", baseUrl)
     const url_params = new URLSearchParams({
         latitude: String(latitude), 
         longitude: String(longitude)

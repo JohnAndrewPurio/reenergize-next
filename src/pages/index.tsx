@@ -15,7 +15,14 @@ const Home: NextPage = () => {
   }, [])
 
   return (
-    <></>
+    <>
+      <ion-header>
+        
+      </ion-header>
+      <ion-content>
+
+      </ion-content>
+    </>
   )
 }
 

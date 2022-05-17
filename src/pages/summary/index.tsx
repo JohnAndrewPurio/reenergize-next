@@ -4,6 +4,8 @@ import { getSunTimes } from '../../../utils/Time/suncalc'
 import { getWorldRadiationEstimatedActuals, getWorldRadiationForecasts } from '../../api/Solcast'
 import { WorldRadiationForecastData } from '../../api/Solcast/constants'
 import DataChart from '../../components/DataChart'
+import { getCurrentPosition } from '../../components/GeoLocation'
+import Toolbar from '../../components/Toolbar'
 
 interface SummaryProps {
   apiUrl: string
@@ -259,17 +261,36 @@ const Summary: NextPage<SummaryProps> = ({ apiUrl }) => {
     ]
   )
 
+  const retrieveGeolocation = async () => {
+    console.log("Retrieving location coordinates")
+
+    try {
+      const coordinates = await getCurrentPosition()
+
+      console.log(coordinates)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const retrieveData = async () => {
     const currentDate = new Date()
 
     const latitude = 13.93139
     const longitude = 121.61722
     const times = getSunTimes(currentDate, latitude, longitude)
+    const dawn = times.dawn.getTime()
+    const dusk = times.dusk.getTime()
+
+    console.log("Sun Times:", new Date(dawn), new Date(dusk))
 
     const filterByDay: any = ({ period_end }: any) => {
-      const periodEndTime = new Date(period_end).getTime()
+      const periodEndDate = new Date(period_end)
+      const periodEndTime = periodEndDate.getTime()
 
-      return periodEndTime > times.dawn.getTime() && periodEndTime < times.dusk.getTime()
+      console.log("Sun Times:", new Date(dawn), periodEndDate, new Date(dusk))
+
+      return periodEndTime > dawn && periodEndTime < dusk
     }
 
     try {
@@ -291,6 +312,8 @@ const Summary: NextPage<SummaryProps> = ({ apiUrl }) => {
         return !isDuplicate
       })
 
+      console.log("New Data:", combinedData)
+
       setChartData(combinedData)
     } catch (error) {
       console.log(error)
@@ -298,31 +321,47 @@ const Summary: NextPage<SummaryProps> = ({ apiUrl }) => {
   }
 
   useEffect(() => {
-    // retrieveData()
+    retrieveData()
+    // retrieveGeolocation()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <>
-      <ion-card>
-        {
-          chartData &&
-          <DataChart
-            labels={chartData.map(({ period_end }) => new Date(period_end))}
-            chartData={[
-              {
-                label: "Power per Unit Area (W/m2)",
-                borderColor: "#9ACD32",
-                data: chartData.map(({ ghi }) => ghi),
-                borderJoinStyle: "round",
-                fill: "start"
-              }
-            ]}
-          />
-        }
-        <ion-card-title>Lucena, Quezon</ion-card-title>
-      </ion-card>
+      <ion-header translucent>
+        <Toolbar name='Forecasts' />
+      </ion-header>
+      <ion-content fullscreen>
+        <ion-card class="ion-padding ion-margin">
+          <div className="chart">
+            {
+              chartData &&
+              <DataChart
+                labels={chartData.map(({ period_end }) => new Date(period_end))}
+                chartData={[
+                  {
+                    label: "Power per Unit Area (W/m2)",
+                    borderColor: "#9ACD32",
+                    data: chartData.map(({ ghi }) => ghi),
+                    borderJoinStyle: "round",
+                    fill: "start"
+                  }
+                ]}
+              />
+            }
+          </div>
+          <ion-card-header>
+            <ion-card-subtitle>Lucena, Quezon</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+
+        <style jsx>{`
+          .chart {
+            height: 250px;
+          }
+      `}</style>
+      </ion-content>
     </>
   )
 }

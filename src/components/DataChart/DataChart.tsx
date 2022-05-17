@@ -20,6 +20,8 @@ const DataChart: FC<DataChartProps> = ({ labels, chartData }) => {
         datasets: chartData
       },
       options: {
+        maintainAspectRatio: false,
+        responsive: true,
         layout: {
           padding: {
             top: 8,
@@ -34,7 +36,6 @@ const DataChart: FC<DataChartProps> = ({ labels, chartData }) => {
           }
         },
         animation: progressiveAnimation(totalDuration, delayBetweenPoints),
-        responsive: true,
         scales: {
           x: {
             grid: {
