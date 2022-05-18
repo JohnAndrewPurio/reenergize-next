@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react"
-import { progressiveAnimation } from "../../../utils/Chart/animations"
-import { createChart } from "../../../utils/Chart"
+import { progressiveAnimation } from "../../utils/Chart/animations"
+import { createChart } from "../../utils/Chart"
 import { BubbleDataPoint, ChartDataset, ChartTypeRegistry, ScatterDataPoint } from "chart.js"
 
 interface DataChartProps {

@@ -1,9 +1,15 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { BackButtonEvent, JSX as LocalJSX } from '@ionic/core'
 import { JSX as IoniconsJSX } from 'ionicons'
-import { HTMLAttributes, ReactText, useEffect } from 'react'
+import { HTMLAttributes, MutableRefObject, ReactText, useEffect } from 'react'
 import { defineCustomElements as ionDefineCustomElements } from '@ionic/core/loader';
+import { useRouter } from 'next/router'
+import { appExit } from '../utils/Navigation'
+import { routes } from '../utils/Navigation/routes'
+
+import Head from 'next/head'
+
+import '../styles/globals.css'
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/core/css/core.css';
 
@@ -19,15 +25,13 @@ import '@ionic/core/css/text-alignment.css';
 import '@ionic/core/css/text-transformation.css';
 import '@ionic/core/css/flex-utils.css';
 import '@ionic/core/css/display.css';
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { appExit } from '../../utils/Navigation'
-import { routes } from '../../utils/Navigation/routes'
+
 
 type ToReact<T> = {
   [P in keyof T]?: T[P] & Omit<HTMLAttributes<Element>, 'className'> & {
     class?: string;
     key?: ReactText;
+    ref?: MutableRefObject<any>
   }
 }
 

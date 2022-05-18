@@ -3,4 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
 }
 
-module.exports = nextConfig
+const withTM = require('next-transpile-modules')([
+  "@awesome-cordova-plugins/geolocation",
+]); // pass the modules you would like to see transpiled
+
+module.exports = withTM(nextConfig)

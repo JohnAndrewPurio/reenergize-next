@@ -1,17 +1,20 @@
-import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
-import React, { useEffect, useMemo, useState } from 'react'
-import { getSunTimes } from '../../../utils/Time/suncalc'
+import { GetStaticProps, NextPage } from 'next'
+import React, { useEffect, useRef, useState } from 'react'
+import { getSunTimes } from '../../utils/Time/suncalc'
 import { getWorldRadiationEstimatedActuals, getWorldRadiationForecasts } from '../../api/Solcast'
-import { WorldRadiationForecastData } from '../../api/Solcast/constants'
 import DataChart from '../../components/DataChart'
-import { getCurrentPosition } from '../../components/GeoLocation'
 import Toolbar from '../../components/Toolbar'
+import { useRouter } from 'next/router'
+import { getValue } from '../../utils/Storage'
+import { Position } from '@capacitor/geolocation'
 
-interface SummaryProps {
+interface ForecastsProps {
   apiUrl: string
 }
 
-const Summary: NextPage<SummaryProps> = ({ apiUrl }) => {
+const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
+  const iframeCard = useRef<HTMLIonCardElement>()
+  const [location, setLocation] = useState<Position>()
   const [chartData, setChartData] = useState<any[]>(
     // Temporary Data
     [
@@ -261,71 +264,72 @@ const Summary: NextPage<SummaryProps> = ({ apiUrl }) => {
     ]
   )
 
-  const retrieveGeolocation = async () => {
-    console.log("Retrieving location coordinates")
-
-    try {
-      const coordinates = await getCurrentPosition()
-
-      console.log(coordinates)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const retrieveData = async () => {
-    const currentDate = new Date()
-
-    const latitude = 13.93139
-    const longitude = 121.61722
-    const times = getSunTimes(currentDate, latitude, longitude)
-    const dawn = times.dawn.getTime()
-    const dusk = times.dusk.getTime()
-
-    console.log("Sun Times:", new Date(dawn), new Date(dusk))
-
-    const filterByDay: any = ({ period_end }: any) => {
-      const periodEndDate = new Date(period_end)
-      const periodEndTime = periodEndDate.getTime()
-
-      console.log("Sun Times:", new Date(dawn), periodEndDate, new Date(dusk))
-
-      return periodEndTime > dawn && periodEndTime < dusk
-    }
-
-    try {
-      const forecasts = await getWorldRadiationForecasts(apiUrl, latitude, longitude)
-      const estimates = await getWorldRadiationEstimatedActuals(apiUrl, latitude, longitude)
-
-      const primaryData = forecasts.forecasts.filter(filterByDay).sort((current, next) => new Date(current.period_end).getTime() - new Date(next.period_end).getTime())
-      const secondaryData = estimates.estimated_actuals.filter(filterByDay).sort((current, next) => new Date(current.period_end).getTime() - new Date(next.period_end).getTime())
-
-      const duplicateCheck: {
-        [key: string]: boolean
-      } = {}
-
-      const combinedData = [...primaryData, ...secondaryData].filter(({ period_end }: { period_end: string }) => {
-        const isDuplicate = duplicateCheck[period_end]
-
-        duplicateCheck[period_end] = true
-
-        return !isDuplicate
-      })
-
-      console.log("New Data:", combinedData)
-
-      setChartData(combinedData)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   useEffect(() => {
+    const retrieveUserLocation = async () => {
+      try {
+        const location = await getValue("location")
+
+        console.log("Forecast location:", location)
+        setLocation(location)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const retrieveData = async () => {
+      const currentDate = new Date()
+  
+      const latitude = 13.93139
+      const longitude = 121.61722
+      const times = getSunTimes(currentDate, latitude, longitude)
+      const dawn = times.dawn.getTime()
+      const dusk = times.dusk.getTime()
+  
+      const filterByDay: any = ({ period_end }: any) => {
+        const periodEndDate = new Date(period_end)
+        const periodEndTime = periodEndDate.getTime()
+  
+        return periodEndTime > dawn && periodEndTime < dusk
+      }
+  
+      try {
+        const forecasts = await getWorldRadiationForecasts(apiUrl, latitude, longitude)
+        const estimates = await getWorldRadiationEstimatedActuals(apiUrl, latitude, longitude)
+  
+        const primaryData = forecasts.forecasts.filter(filterByDay).sort((current, next) => new Date(current.period_end).getTime() - new Date(next.period_end).getTime())
+        const secondaryData = estimates.estimated_actuals.filter(filterByDay).sort((current, next) => new Date(current.period_end).getTime() - new Date(next.period_end).getTime())
+  
+        const duplicateCheck: {
+          [key: string]: boolean
+        } = {}
+  
+        const combinedData = [...secondaryData, ...primaryData].filter(({ period_end }: { period_end: string }) => {
+          const isDuplicate = duplicateCheck[period_end]
+  
+          duplicateCheck[period_end] = true
+  
+          return !isDuplicate
+        })
+  
+        setChartData(combinedData)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     retrieveData()
-    // retrieveGeolocation()
+    retrieveUserLocation()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  if (!location) {
+    return (
+      <>
+        <ion-text color="danger">Missing Coordinates</ion-text>
+      </>
+    )
+  }
 
   return (
     <>
@@ -355,18 +359,41 @@ const Summary: NextPage<SummaryProps> = ({ apiUrl }) => {
             <ion-card-subtitle>Lucena, Quezon</ion-card-subtitle>
           </ion-card-header>
         </ion-card>
+        <ion-card ref={iframeCard} class="iframeCard">
+          <iframe
+            className="solcast-frame"
+            src="https://solcast.com/embed.html?v=phl/2022-05-16/1280x720"
+            frameBorder="0"
+            allow="autoplay;"
+          />
+
+          <ion-card-header>
+            <ion-card-subtitle>Solar Irradiance Data</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
 
         <style jsx>{`
           .chart {
             height: 250px;
           }
+
+          .iframeCard {
+            height: 200px;
+          }
+
+          .solcast-frame {
+            width: 100%;
+            height: 225px;
+            object-fit: contain;
+          }
+
       `}</style>
       </ion-content>
     </>
   )
 }
 
-export const getStaticProps: GetStaticProps<SummaryProps> = async () => {
+export const getStaticProps: GetStaticProps<ForecastsProps> = async () => {
   return {
     props: {
       apiUrl: process.env.API_BASE_URL || "https://reenergize-server.herokuapp.com/"
@@ -374,4 +401,4 @@ export const getStaticProps: GetStaticProps<SummaryProps> = async () => {
   }
 }
 
-export default Summary
+export default Forecasts
