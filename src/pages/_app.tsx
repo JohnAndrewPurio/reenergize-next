@@ -25,6 +25,7 @@ import '@ionic/core/css/text-alignment.css';
 import '@ionic/core/css/text-transformation.css';
 import '@ionic/core/css/flex-utils.css';
 import '@ionic/core/css/display.css';
+import ErrorBoundary from '../components/error_handlers/ErrorBoundary';
 
 
 type ToReact<T> = {
@@ -76,7 +77,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>ReEnergize</title>
       </Head>
       <ion-app>
-        <Component {...pageProps} />
+        <ErrorBoundary>
+          <Component {...pageProps} />
+        </ErrorBoundary>
       </ion-app>
     </>
   )

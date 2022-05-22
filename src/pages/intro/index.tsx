@@ -1,7 +1,8 @@
-import { NextPage } from "next"
-import { useEffect } from "react"
+import { GetStaticProps, NextPage } from "next"
 
 import Swiper, { Navigation, Pagination } from "swiper"
+import UserLocationSlide from "../../components/slides/UserLocationSlide"
+import ContinueSlide from "../../components/slides/ContinueSlide"
 
 import "swiper/css"
 import "swiper/css/navigation"
@@ -14,21 +15,29 @@ const swiper = new Swiper(".swiper", {
     }
 })
 
-const Intro: NextPage = () => {
-    useEffect(() => {
+interface IntroProps {
+    apiUrl: string
+}
 
-    }, [])
+const Intro: NextPage<IntroProps> = ({ apiUrl }) => {
+    const slides = [
+        <UserLocationSlide baseUrl={apiUrl} key="" />,
+        <ContinueSlide key="" />
+    ]
 
     return (
         <>
             <ion-content fullscreen>
                 <div className="swiper">
                     <div className="swiper-wrapper">
-                        <div className="swiper-slide">Slide 1</div>
-                        <div className="swiper-slide">Slide 2</div>
-                        <div className="swiper-slide">Slide 3</div>
+                        {
+                            slides.map((slide, index) => (
+                                <div className="swiper-slide" key={index}>
+                                    {slide}
+                                </div>
+                            ))
+                        }
                     </div>
-
                     <div className="swiper-pagination" />
                 </div>
             </ion-content>
@@ -36,10 +45,18 @@ const Intro: NextPage = () => {
                 .swiper {
                     width: 100%;
                     height: 100%;
-                }    
+                }
             `}</style>
         </>
     )
+}
+
+export const getStaticProps: GetStaticProps<IntroProps> = async () => {
+    return {
+        props: {
+            apiUrl: process.env.API_BASE_URL || "https://reenergize-server.herokuapp.com/"
+        }
+    }
 }
 
 export default Intro

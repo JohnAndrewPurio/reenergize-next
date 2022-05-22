@@ -1,5 +1,3 @@
-export const apiBaseUrl = "https://reenergize-server.herokuapp.com/"
-
 export const worldRadiationForecasts = {
     ghi: "Global Horizontal Irradiance",
     dni: "Direct Normal Irradiance",
