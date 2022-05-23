@@ -2,35 +2,36 @@ import type { AppProps } from 'next/app'
 import { BackButtonEvent, JSX as LocalJSX } from '@ionic/core'
 import { JSX as IoniconsJSX } from 'ionicons'
 import { HTMLAttributes, MutableRefObject, ReactText, useEffect } from 'react'
-import { defineCustomElements as ionDefineCustomElements } from '@ionic/core/loader';
+import { defineCustomElements as ionDefineCustomElements } from '@ionic/core/loader'
 import { useRouter } from 'next/router'
 import { appExit } from '../utils/Navigation'
 import { routes } from '../utils/Navigation/routes'
 
 import Head from 'next/head'
+import ErrorBoundary from '../components/error_handlers/ErrorBoundary'
 
 import '../styles/globals.css'
 /* Core CSS required for Ionic components to work properly */
-import '@ionic/core/css/core.css';
+import '@ionic/core/css/core.css'
 
 /* Basic CSS for apps built with Ionic */
-import '@ionic/core/css/normalize.css';
-import '@ionic/core/css/structure.css';
-import '@ionic/core/css/typography.css';
+import '@ionic/core/css/normalize.css'
+import '@ionic/core/css/structure.css'
+import '@ionic/core/css/typography.css'
 
 /* Optional CSS utils that can be commented out */
-import '@ionic/core/css/padding.css';
-import '@ionic/core/css/float-elements.css';
-import '@ionic/core/css/text-alignment.css';
-import '@ionic/core/css/text-transformation.css';
-import '@ionic/core/css/flex-utils.css';
-import '@ionic/core/css/display.css';
+import '@ionic/core/css/padding.css'
+import '@ionic/core/css/float-elements.css'
+import '@ionic/core/css/text-alignment.css'
+import '@ionic/core/css/text-transformation.css'
+import '@ionic/core/css/flex-utils.css'
+import '@ionic/core/css/display.css'
 
 
 type ToReact<T> = {
   [P in keyof T]?: T[P] & Omit<HTMLAttributes<Element>, 'className'> & {
-    class?: string;
-    key?: ReactText;
+    class?: string
+    key?: ReactText
     ref?: MutableRefObject<any>
   }
 }
@@ -76,7 +77,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>ReEnergize</title>
       </Head>
       <ion-app>
-        <Component {...pageProps} />
+        <ErrorBoundary>
+          <Component {...pageProps} />
+        </ErrorBoundary>
       </ion-app>
     </>
   )

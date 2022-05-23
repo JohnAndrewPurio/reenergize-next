@@ -1,0 +1,1 @@
+export const apiBaseUrl = "https://reenergize-server.herokuapp.com/"
