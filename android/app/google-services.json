@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "372872743297",
+    "project_id": "re-energize",
+    "storage_bucket": "re-energize.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372872743297:android:6e427571e43b6890c70080",
+        "android_client_info": {
+          "package_name": "com.energy.reenergize"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372872743297-quu24s1119vtftf3dkiv6tcvg60927nb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLNlNLtMNqp0JHSI4Y4v2FAxUsIgfqfJA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372872743297-quu24s1119vtftf3dkiv6tcvg60927nb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
