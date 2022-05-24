@@ -7,8 +7,9 @@ const ProfileCard = () => {
 
     const signOutUser = async () => {
         try {
-            await signOut()
-            const data = await getCurrentUser()
+            const data = await signOut()
+
+            console.log(data)
 
             setUserData(data)
         } catch (error) {

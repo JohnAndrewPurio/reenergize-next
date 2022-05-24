@@ -1,6 +1,7 @@
 import { menuController } from "@ionic/core"
 import { useRouter } from "next/router"
 import { FC } from "react"
+import { camelCaseToNormalCase } from "../../utils/Text"
 import { menuContent } from "./content"
 
 export interface MenuInterface {
@@ -35,7 +36,7 @@ const Menu: FC<MenuInterface> = ({ menuId, contentId, children }) => {
                             Object.entries(menuContent).map(([key, value]) => (
                                 <ion-item key={key} button onClick={() => redirectHandler(value.href)}>
                                     <ion-icon icon={value.icon} slot="start" />
-                                    <ion-label class="ion-text-capitalized">{key}</ion-label>
+                                    <ion-label>{camelCaseToNormalCase(key)}</ion-label>
                                 </ion-item>
                             ))
                         }

@@ -1,11 +1,40 @@
 import { checkmarkDoneCircleOutline, lockClosedOutline, mailOutline, personCircleOutline } from "ionicons/icons"
+import Link from "next/link"
+import { FormEventHandler } from "react"
+import { createUserWithEmailAndPassword } from "../../../api/Firebase/authentication"
+import { useUserInfo } from "../../../context/User"
 import { routes } from "../../../utils/Navigation/routes"
 
 import styles from "../styles.module.css"
 
 const SignUpCard = () => {
-    const signUpHandler = async () => {
-        
+    const { setData: setUserData } = useUserInfo()
+
+    const formHandler: FormEventHandler<HTMLFormElement> = (event) => {
+        event.preventDefault()
+
+        const formData = new FormData(event.target as HTMLFormElement)
+        const { displayName, email, password, confirmPassword } = Object.fromEntries(formData.entries())
+
+        if (password !== confirmPassword) {
+            return
+        }
+
+        signUpHandler(email as string, password as string)
+    }
+
+    const signUpHandler = async (email: string, password: string) => {
+        console.log(email, password)
+
+        try {
+            const user = await createUserWithEmailAndPassword(email, password)
+
+            console.log("Signed in user:", user)
+
+            setUserData(user)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -17,40 +46,46 @@ const SignUpCard = () => {
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list>
-                            <ion-item>
-                                <ion-icon icon={personCircleOutline} slot="start" />
-                                <ion-input placeholder="Username" type="text" />
-                            </ion-item>
-                            <ion-item>
-                                <ion-icon icon={mailOutline} slot="start" />
-                                <ion-input placeholder="Email" type="email" />
-                            </ion-item>
-                            <ion-item>
-                                <ion-icon icon={lockClosedOutline} slot="start" />
-                                <ion-input placeholder="Password" type="password" />
-                            </ion-item>
-                            <ion-item>
-                                <ion-icon icon={checkmarkDoneCircleOutline} slot="start" />
-                                <ion-input placeholder="Confirm Password" type="password" />
-                            </ion-item>
-                            <ion-item lines="none">
-                                <ion-grid>
-                                    <ion-row class="ion-justify-content-center">
-                                        <ion-button size="default">
-                                            Sign Up
-                                        </ion-button>
-                                    </ion-row>
-                                    <ion-row class="ion-justify-content-center ion-padding">
-                                        <a href={routes["LOGIN"]}>
-                                            Already have an account?
-                                        </a>
-                                    </ion-row>
-                                </ion-grid>
-                            </ion-item>
+                            <form onSubmit={formHandler}>
+                                <ion-item>
+                                    <ion-icon icon={personCircleOutline} slot="start" />
+                                    <ion-input placeholder="Username" type="text" name="displayName" />
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon icon={mailOutline} slot="start" />
+                                    <ion-input placeholder="Email" type="email" name="email" />
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon icon={lockClosedOutline} slot="start" />
+                                    <ion-input placeholder="Password" type="password" name="password" />
+                                </ion-item>
+                                <ion-item>
+                                    <ion-icon icon={checkmarkDoneCircleOutline} slot="start" />
+                                    <ion-input placeholder="Confirm Password" type="password" name="confirmPassword" />
+                                </ion-item>
+                                <ion-item lines="none">
+                                    <ion-grid>
+                                        <ion-row class="ion-justify-content-center">
+                                            <ion-button size="default" type="submit">
+                                                Sign Up
+                                            </ion-button>
+                                        </ion-row>
+                                        <ion-row class="ion-justify-content-center ion-padding">
+                                            <Link href={routes["LOGIN"]}>
+                                                <a>Already have an account?</a>
+                                            </Link>
+                                        </ion-row>
+                                    </ion-grid>
+                                </ion-item>
+                            </form>
                         </ion-list>
                     </ion-card-content>
                 </ion-card>
             </ion-row>
+
+            <ion-popover>
+
+            </ion-popover>
         </ion-grid>
     )
 }

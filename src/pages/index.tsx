@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import Menu from '../components/Menu'
 
 import type { NextPage } from 'next'
+
 import { getCurrentPosition } from '../utils/GeoLocation'
 import { storeValue } from '../utils/Storage'
 import { getCurrentUser } from '../api/Firebase/authentication'
@@ -27,8 +28,12 @@ const Home: NextPage = () => {
   }
 
   const promptUserLocation = async () => {
+    console.log("User Location Prompted!!")
+
     try {
       const location = await getCurrentPosition()
+
+      console.log("Value Stored:", location)
 
       await storeValue("location", location)
     } catch (error) {
@@ -51,7 +56,7 @@ const Home: NextPage = () => {
   }
 
   useEffect(() => {
-    // promptUserLocation()
+    promptUserLocation()
     getUserInfo()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,4 +1,5 @@
 import { lockClosedOutline, logoGoogle, mailOutline } from "ionicons/icons"
+import Link from "next/link"
 import { FormEventHandler } from "react"
 import { signInWithEmailAndPassword, signInWithGoogle } from "../../../api/Firebase/authentication"
 import { useUserInfo } from "../../../context/User"
@@ -33,7 +34,7 @@ const LoginCard = () => {
             console.log("User:", user)
             setUserData(user)
         } catch (error) {
-            throw error
+            console.log(error)
         }
     }
 
@@ -63,9 +64,9 @@ const LoginCard = () => {
                                             </ion-button>
                                         </ion-row>
                                         <ion-row class="ion-justify-content-center ion-padding">
-                                            <a href={routes["SIGNUP"]}>
-                                                {"Don't have an account?"}
-                                            </a>
+                                            <Link href={routes["SIGNUP"]}>
+                                                <a>{"Don't have an account?"}</a>
+                                            </Link>
                                         </ion-row>
                                     </ion-grid>
                                 </ion-item>
@@ -75,7 +76,7 @@ const LoginCard = () => {
                                     <ion-row class="ion-justify-content-center">
                                         <ion-button size="default" color="secondary" onClick={googleSignIn}>
                                             <ion-icon icon={logoGoogle} slot="start" />
-                                            <ion-label>Sign In with Google</ion-label>
+                                            Sign In with Google 
                                         </ion-button>
                                     </ion-row>
                                 </ion-grid>

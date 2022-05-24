@@ -1,4 +1,4 @@
-import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
+import { FirebaseAuthentication, User } from "@capacitor-firebase/authentication";
 
 export const getCurrentUser = async () => {
     try {
@@ -11,23 +11,30 @@ export const getCurrentUser = async () => {
 }
 
 export const createUserWithEmailAndPassword = async (email: string, password: string) => {
-    const result = await FirebaseAuthentication.createUserWithEmailAndPassword({
-        email,
-        password
-    })
-
-    return result.user
+    try {
+        const result = await FirebaseAuthentication.createUserWithEmailAndPassword({
+            email,
+            password
+        })
+    
+        return result.user
+    } catch (error) {
+        throw error
+    }
 }
 
 export const signInWithEmailAndPassword = async (email: string, password: string) => {
-    const result = await FirebaseAuthentication.signInWithEmailAndPassword({
-        email,
-        password
-    })
-
-    return result.user
+    try {
+        const result = await FirebaseAuthentication.signInWithEmailAndPassword({
+            email,
+            password
+        })
+    
+        return result.user
+    } catch (error) {
+        throw error
+    }
 }
-
 
 export const signInWithGoogle = async () => {
     try {
@@ -42,6 +49,9 @@ export const signInWithGoogle = async () => {
 export const signOut = async () => {
     try {
         await FirebaseAuthentication.signOut()
+        const user = await getCurrentUser()
+        
+        return user
     } catch (error) {
         throw error
     }

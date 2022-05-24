@@ -43,9 +43,10 @@ export const UserInfoProvider: FC = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        console.log("Data:", data, pathname)
+        console.log("User Data:", data)
 
         if (!data && !pathname.includes("/auth")) {
+            storeValue("userInfo", data)
             goToLoginPage()
 
             return
