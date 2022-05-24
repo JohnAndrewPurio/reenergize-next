@@ -26,6 +26,7 @@ import '@ionic/core/css/text-alignment.css'
 import '@ionic/core/css/text-transformation.css'
 import '@ionic/core/css/flex-utils.css'
 import '@ionic/core/css/display.css'
+import { UserInfoProvider } from '../context/User'
 
 
 type ToReact<T> = {
@@ -78,7 +79,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ion-app>
         <ErrorBoundary>
-          <Component {...pageProps} />
+          <UserInfoProvider>
+            <Component {...pageProps} />
+          </UserInfoProvider>
         </ErrorBoundary>
       </ion-app>
     </>

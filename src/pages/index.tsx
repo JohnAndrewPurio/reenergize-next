@@ -8,8 +8,9 @@ import Menu from '../components/Menu'
 import type { NextPage } from 'next'
 import { getCurrentPosition } from '../utils/GeoLocation'
 import { storeValue } from '../utils/Storage'
+import { getCurrentUser } from '../api/Firebase/authentication'
+import { useUserInfo } from '../context/User'
 import { routes } from '../utils/Navigation/routes'
-import Echo from '../plugins/echo'
 
 // Menu Component Parameters
 const menuParameters = {
@@ -19,6 +20,7 @@ const menuParameters = {
 
 const Home: NextPage = () => {
   const router = useRouter()
+  const { data: userData } = useUserInfo()
 
   const openMenu = async () => {
     await menuController.open(menuParameters.menuId)
@@ -34,16 +36,23 @@ const Home: NextPage = () => {
     }
   }
 
-  const testPlugin = async () => {
-    const { value } = await Echo.echo({ value: 'Hello World!' });
-    console.log('Response from native:', value);
+  const getUserInfo = async () => {
+    try {
+      const user = await getCurrentUser()
+
+      console.log("User Info:", user)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const redirectToProfilePage = () => {
+    router.push(routes["PROFILE"])
   }
 
   useEffect(() => {
-    testPlugin()
-    router.push(routes["LOGIN"])
-
-    promptUserLocation()
+    // promptUserLocation()
+    getUserInfo()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -64,6 +73,9 @@ const Home: NextPage = () => {
             <ion-button>
               <ion-icon icon={searchOutline} slot="icon-only" />
             </ion-button>
+            <ion-avatar class="ion-padding" onClick={redirectToProfilePage}>
+              <ion-img src={userData?.photoUrl || ""} alt={userData?.displayName || ""} />
+            </ion-avatar>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>

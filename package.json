@@ -1,6 +1,6 @@
 {
   "name": "reenergize-next",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@awesome-cordova-plugins/geolocation": "^5.41.0",
+    "@capacitor-firebase/authentication": "^0.3.0",
     "@capacitor/android": "^3.4.3",
     "@capacitor/app": "^1.1.1",
     "@capacitor/core": "^3.4.3",
