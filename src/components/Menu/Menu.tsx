@@ -1,6 +1,7 @@
 import { menuController } from "@ionic/core"
 import { useRouter } from "next/router"
 import { FC } from "react"
+import { SearchModalProvider } from "../../context/Search"
 import { camelCaseToNormalCase } from "../../utils/Text"
 import { menuContent } from "./content"
 
@@ -43,6 +44,7 @@ const Menu: FC<MenuInterface> = ({ menuId, contentId, children }) => {
                     </ion-list>
                 </ion-content>
             </ion-menu>
+
             <ion-router-outlet id={contentId}>
                 {children}
             </ion-router-outlet>

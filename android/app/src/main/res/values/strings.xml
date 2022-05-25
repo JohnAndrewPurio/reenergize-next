@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">reenergize-next</string>
-    <string name="title_activity_main">reenergize-next</string>
+    <string name="app_name">ReEnergize</string>
+    <string name="title_activity_main">ReEnergize</string>
     <string name="package_name">com.energy.reenergize</string>
     <string name="custom_url_scheme">com.energy.reenergize</string>
 </resources>

@@ -42,21 +42,21 @@ export const UserInfoProvider: FC = ({ children }) => {
         retrieveStoredUserInfo()
     }, [])
 
-    useEffect(() => {
-        console.log("User Data:", data)
+    // useEffect(() => {
+    //     console.log("User Data:", data)
 
-        if (!data && !pathname.includes("/auth")) {
-            storeValue("userInfo", data)
-            goToLoginPage()
+    //     if (!data && !pathname.includes("/auth")) {
+    //         storeValue("userInfo", data)
+    //         goToLoginPage()
 
-            return
-        }
+    //         return
+    //     }
 
-        goToHome()
-        storeValue("userInfo", data)
+    //     goToHome()
+    //     storeValue("userInfo", data)
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [data])
 
     return (
         <UserContext.Provider value={{

@@ -24,8 +24,6 @@ const SignUpCard = () => {
     }
 
     const signUpHandler = async (email: string, password: string) => {
-        console.log(email, password)
-
         try {
             const user = await createUserWithEmailAndPassword(email, password)
 
