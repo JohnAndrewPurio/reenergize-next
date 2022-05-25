@@ -1,0 +1,10 @@
+.grid {
+    height: 82.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mapIcon {
+    font-size: 100px;
+}

@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core"
 import { menuController } from "@ionic/core"
 import { menu, searchOutline } from "ionicons/icons"
 import { useRouter } from "next/router"
@@ -6,8 +7,10 @@ import { getCurrentUser } from "../../api/Firebase/authentication"
 import { useSearchModal } from "../../context/Search"
 import { useUserInfo } from "../../context/User"
 import { getCurrentPosition } from "../../utils/GeoLocation"
+import { nativeForwardGeocoding } from "../../utils/GeoLocation/native"
 import { routes } from "../../utils/Navigation/routes"
 import { storeValue } from "../../utils/Storage"
+import Content from "./Content"
 
 interface HomeInterface {
     menuParameters: {
@@ -31,23 +34,26 @@ const Home: FC<HomeInterface> = ({ menuParameters }) => {
         setIsOpen(true)
     }
 
-    const promptUserLocation = async () => {
-        console.log("User Location Prompted!!")
-
-        try {
-            const location = await getCurrentPosition()
-
-            console.log("Value Stored:", location)
-
-            await storeValue("location", location)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     const redirectToProfilePage = () => {
         router.push(routes["PROFILE"])
     }
+
+    useEffect(() => {
+        if (!Capacitor.isNativePlatform())
+            return
+
+        const geocode = async () => {
+            try {
+                const result = await nativeForwardGeocoding("lucena")
+
+                console.log("Forward Geocode:", result)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        geocode()
+    }, [])
 
     return (
         <>
@@ -68,12 +74,8 @@ const Home: FC<HomeInterface> = ({ menuParameters }) => {
                     </ion-buttons>
                 </ion-toolbar>
             </ion-header>
-            <ion-content>
-                <ion-card>
-                    <ion-card-header>
-                        <ion-card-title>Home Page</ion-card-title>
-                    </ion-card-header>
-                </ion-card>
+            <ion-content fullscreen>
+                <Content />
             </ion-content>
 
             <ion-fab vertical="bottom" horizontal="end">

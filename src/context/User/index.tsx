@@ -42,6 +42,8 @@ export const UserInfoProvider: FC = ({ children }) => {
         retrieveStoredUserInfo()
     }, [])
 
+
+    // Uncomment when developing in browser
     // useEffect(() => {
     //     console.log("User Data:", data)
 

@@ -28,6 +28,8 @@ const SearchModal: FC<SearchModalInterface> = ({ searchTitle }) => {
 
     useEffect(() => {
         openModal()
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
