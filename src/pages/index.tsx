@@ -17,8 +17,6 @@ const menuParameters = {
 }
 
 const HomePage: NextPage<HomeProps> = ({ apiUrl }) => {
-  console.log("Home Page URL:", apiUrl)
-
   return (
     <Menu {...menuParameters}>
       <SearchModalProvider searchTitle="Search Location" >

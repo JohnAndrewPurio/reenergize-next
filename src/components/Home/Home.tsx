@@ -1,13 +1,14 @@
 import { menuController, SearchbarChangeEventDetail } from "@ionic/core"
 import { menu, searchOutline } from "ionicons/icons"
 import { useRouter } from "next/router"
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { useSearchModal } from "../../context/Search"
 import { useUserInfo } from "../../context/User"
 import { getForwardGeocoding } from "../../api/Mapbox"
 import { routes } from "../../utils/Navigation/routes"
 
 import Content from "./Content"
+import SolarMap from "../SolarMap"
 
 interface HomeInterface {
     menuParameters: {
@@ -20,7 +21,9 @@ interface HomeInterface {
 const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
     const router = useRouter()
     const { data: userData } = useUserInfo()
-    const { isOpen, setIsOpen, setSearchHandler, setData: setSearchResultsData } = useSearchModal()
+    const {
+        setIsOpen, setSearchHandler, setData: setSearchResultsData
+    } = useSearchModal()
 
     const openMenu = async () => {
         await menuController.open(menuParameters.menuId)
@@ -40,7 +43,6 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
         }
 
         try {
-            // const results = await nativeForwardGeocoding(value)
             const { features } = await getForwardGeocoding(apiUrl, value)
 
             console.log("Search Results:", features)
@@ -55,8 +57,13 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
 
     const openModal = () => {
         setIsOpen(true)
-        setSearchHandler(() => searchHandler)
     }
+
+    useEffect(() => {
+        setSearchHandler(() => searchHandler)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <>
@@ -78,6 +85,7 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
                 </ion-toolbar>
             </ion-header>
             <ion-content fullscreen>
+                <SolarMap />
                 <Content />
             </ion-content>
 

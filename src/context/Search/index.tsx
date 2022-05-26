@@ -1,7 +1,8 @@
 import { SearchbarChangeEventDetail } from "@ionic/core";
-import { closeCircleOutline, closeOutline } from "ionicons/icons";
+import { closeOutline } from "ionicons/icons";
 import { createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { sampleForwardGeocodingData } from "../../api/Mapbox/constants";
+import { useUserLocation } from "../Location"
 
 type SearchResult = typeof sampleForwardGeocodingData.features[0]
 
@@ -35,6 +36,7 @@ interface SearchModalInterface {
 
 export const SearchModalProvider: FC<SearchModalInterface> = ({ children, searchTitle }) => {
     const searchRef = useRef<HTMLIonSearchbarElement>()
+    const { setData: setLocationData } = useUserLocation()
 
     const [data, setData] = useState<SearchResult[]>([])
     const [isOpen, setIsOpen] = useState(false)
@@ -44,22 +46,27 @@ export const SearchModalProvider: FC<SearchModalInterface> = ({ children, search
         setIsOpen(false)
     }
 
-    const searchListener = (e: Event) => {
-        const event = e as CustomEvent<SearchbarChangeEventDetail>
+    const selectHandler = (data: SearchResult) => {
+        const { center, text } = data
+        const [latitude, longitude] = center
 
-        searchHandler(event)
+        setIsOpen(false)
+        setLocationData({
+            latitude, longitude,
+            address: text
+        })
     }
-
+  
     useEffect(() => {
-        if (!isOpen) {
-            searchRef.current?.removeEventListener("ionChange", searchListener)
-
-            return
+        const searchListener = (e: Event) => {
+            const event = e as CustomEvent<SearchbarChangeEventDetail>
+    
+            searchHandler(event)
         }
 
+        searchRef.current?.removeEventListener("ionChange", searchListener)
         searchRef.current?.addEventListener("ionChange", searchListener)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpen])
+    }, [searchHandler])
 
     return (
         <SearchContext.Provider value={{
@@ -88,11 +95,11 @@ export const SearchModalProvider: FC<SearchModalInterface> = ({ children, search
                             </ion-grid>
                             : <ion-list>
                                 {
-                                    data.map(({ place_name, text }, index) => (
-                                        <ion-item key={index}>
+                                    data.map((ele, index) => (
+                                        <ion-item key={index} button onClick={() => selectHandler(ele)}>
                                             <ion-label>
-                                                <h5>{text}</h5>
-                                                <p>{place_name}</p>
+                                                <h5>{ele.text}</h5>
+                                                <p>{ele.place_name}</p>
                                             </ion-label>
                                         </ion-item>
                                     ))
