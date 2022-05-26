@@ -1,4 +1,4 @@
-const sampleForwardGeocodingData = {
+export const sampleForwardGeocodingData = {
 	"type": "FeatureCollection",
 	"query": [
 		"lucena"

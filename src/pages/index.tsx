@@ -2,11 +2,13 @@
 
 import Menu from '../components/Menu'
 
-import type { NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import { SearchModalProvider } from '../context/Search'
 import Home from '../components/Home'
 
-
+interface HomeProps {
+  apiUrl: string
+}
 
 // Menu Component Parameters
 const menuParameters = {
@@ -14,14 +16,24 @@ const menuParameters = {
   contentId: "main"
 }
 
-const HomePage: NextPage = () => {
+const HomePage: NextPage<HomeProps> = ({ apiUrl }) => {
+  console.log("Home Page URL:", apiUrl)
+
   return (
     <Menu {...menuParameters}>
       <SearchModalProvider searchTitle="Search Location" >
-        <Home menuParameters={menuParameters} />
+        <Home menuParameters={menuParameters} apiUrl={apiUrl} />
       </SearchModalProvider>
     </Menu>
   )
+}
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  return {
+      props: {
+          apiUrl: process.env.API_BASE_URL || "https://reenergize-server.herokuapp.com/"
+      }
+  }
 }
 
 export default HomePage

@@ -1,4 +1,5 @@
 import { User } from "@capacitor-firebase/authentication";
+import { Capacitor } from "@capacitor/core";
 import { useRouter } from "next/router";
 import { createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { routes } from "../../utils/Navigation/routes";
@@ -43,22 +44,21 @@ export const UserInfoProvider: FC = ({ children }) => {
     }, [])
 
 
-    // Uncomment when developing in browser
-    // useEffect(() => {
-    //     console.log("User Data:", data)
+    useEffect(() => {
+        if(!Capacitor.isNativePlatform())
+            return
 
-    //     if (!data && !pathname.includes("/auth")) {
-    //         storeValue("userInfo", data)
-    //         goToLoginPage()
+        if (!data && !pathname.includes("/auth")) {
+            storeValue("userInfo", data)
+            goToLoginPage()
 
-    //         return
-    //     }
+            return
+        }
 
-    //     goToHome()
-    //     storeValue("userInfo", data)
-
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [data])
+        goToHome()
+        storeValue("userInfo", data)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data])
 
     return (
         <UserContext.Provider value={{

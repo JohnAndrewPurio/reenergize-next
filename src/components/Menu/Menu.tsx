@@ -1,7 +1,6 @@
 import { menuController } from "@ionic/core"
 import { useRouter } from "next/router"
 import { FC } from "react"
-import { SearchModalProvider } from "../../context/Search"
 import { camelCaseToNormalCase } from "../../utils/Text"
 import { menuContent } from "./content"
 
@@ -12,7 +11,6 @@ export interface MenuInterface {
 
 const Menu: FC<MenuInterface> = ({ menuId, contentId, children }) => {
     const router = useRouter()
-
     const closeMenu = async () => {
         await menuController.close(menuId)
     }
@@ -35,7 +33,7 @@ const Menu: FC<MenuInterface> = ({ menuId, contentId, children }) => {
                     <ion-list>
                         {
                             Object.entries(menuContent).map(([key, value]) => (
-                                <ion-item key={key} button onClick={() => redirectHandler(value.href)}>
+                                <ion-item key={key} button onClick={() => redirectHandler(value.href)} lines="none">
                                     <ion-icon icon={value.icon} slot="start" />
                                     <ion-label>{camelCaseToNormalCase(key)}</ion-label>
                                 </ion-item>

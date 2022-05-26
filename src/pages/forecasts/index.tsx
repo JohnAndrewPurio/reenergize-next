@@ -81,7 +81,12 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
   if (!location) {
     return (
       <>
-        <ion-text color="danger">Missing Coordinates</ion-text>
+        <ion-header translucent>
+          <Toolbar name='Forecasts' />
+        </ion-header>
+        <ion-content>
+          <ion-text color="danger">Missing Coordinates</ion-text>
+        </ion-content>
       </>
     )
   }

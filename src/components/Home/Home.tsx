@@ -1,15 +1,12 @@
-import { Capacitor } from "@capacitor/core"
-import { menuController } from "@ionic/core"
+import { menuController, SearchbarChangeEventDetail } from "@ionic/core"
 import { menu, searchOutline } from "ionicons/icons"
 import { useRouter } from "next/router"
-import { FC, useEffect } from "react"
-import { getCurrentUser } from "../../api/Firebase/authentication"
+import { FC } from "react"
 import { useSearchModal } from "../../context/Search"
 import { useUserInfo } from "../../context/User"
-import { getCurrentPosition } from "../../utils/GeoLocation"
-import { nativeForwardGeocoding } from "../../utils/GeoLocation/native"
+import { getForwardGeocoding } from "../../api/Mapbox"
 import { routes } from "../../utils/Navigation/routes"
-import { storeValue } from "../../utils/Storage"
+
 import Content from "./Content"
 
 interface HomeInterface {
@@ -17,43 +14,49 @@ interface HomeInterface {
         menuId: string,
         contentId: string
     }
+    apiUrl: string
 }
 
-const Home: FC<HomeInterface> = ({ menuParameters }) => {
+const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
     const router = useRouter()
     const { data: userData } = useUserInfo()
-    const { isOpen, setIsOpen } = useSearchModal()
+    const { isOpen, setIsOpen, setSearchHandler, setData: setSearchResultsData } = useSearchModal()
 
     const openMenu = async () => {
         await menuController.open(menuParameters.menuId)
-    }
-
-    const openModal = () => {
-        console.log("Opening Modal...")
-
-        setIsOpen(true)
     }
 
     const redirectToProfilePage = () => {
         router.push(routes["PROFILE"])
     }
 
-    useEffect(() => {
-        if (!Capacitor.isNativePlatform())
+    const searchHandler = async (event: CustomEvent<SearchbarChangeEventDetail>) => {
+        const { value } = event.detail
+
+        if (!value) {
+            setSearchResultsData([])
+
             return
-
-        const geocode = async () => {
-            try {
-                const result = await nativeForwardGeocoding("lucena")
-
-                console.log("Forward Geocode:", result)
-            } catch (error) {
-                console.log(error)
-            }
         }
 
-        geocode()
-    }, [])
+        try {
+            // const results = await nativeForwardGeocoding(value)
+            const { features } = await getForwardGeocoding(apiUrl, value)
+
+            console.log("Search Results:", features)
+
+            setSearchResultsData(
+                features.map((feature) => feature)
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const openModal = () => {
+        setIsOpen(true)
+        setSearchHandler(() => searchHandler)
+    }
 
     return (
         <>

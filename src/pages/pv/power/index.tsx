@@ -1,3 +1,4 @@
+import PVPower from "../../../components/PVPower/PVPower"
 import Toolbar from "../../../components/Toolbar"
 
 const Power = () => {
@@ -7,7 +8,7 @@ const Power = () => {
                 <Toolbar name="PV Power" />
             </ion-header>
             <ion-content>
-                <div>Power</div>
+                <PVPower />
             </ion-content>
         </>
     )

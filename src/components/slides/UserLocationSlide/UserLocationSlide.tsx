@@ -2,7 +2,6 @@ import { popoverController, SearchbarChangeEventDetail } from "@ionic/core"
 import { FC, useEffect, useRef, useState } from "react"
 import { getForwardGeocoding, getReverseGeocoding } from "../../../api/Mapbox"
 import { getCurrentPosition } from "../../../utils/GeoLocation"
-import { storeValue } from "../../../utils/Storage"
 
 import styles from "./../styles.module.css"
 import SearchResultsList from "./SearchResultsList"
@@ -20,9 +19,7 @@ const UserLocationSlide: FC<UserLocationSlideInterface> = ({ baseUrl }) => {
     const { coords } = location
     const geocode = await getReverseGeocoding(baseUrl, coords.longitude.toFixed(4), coords.latitude.toFixed(4))
 
-    await storeValue("location", {
-      ...location, geocode
-    })
+    console.log(geocode)
   }
 
   useEffect(() => {

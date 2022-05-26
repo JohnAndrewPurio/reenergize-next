@@ -27,6 +27,7 @@ import '@ionic/core/css/text-transformation.css'
 import '@ionic/core/css/flex-utils.css'
 import '@ionic/core/css/display.css'
 import { UserInfoProvider } from '../context/User'
+import { UserLocationProvider } from '../context/Location'
 
 
 type ToReact<T> = {
@@ -80,7 +81,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ion-app>
         <ErrorBoundary>
           <UserInfoProvider>
-            <Component {...pageProps} />
+            <UserLocationProvider>
+              <Component {...pageProps} />
+            </UserLocationProvider>
           </UserInfoProvider>
         </ErrorBoundary>
       </ion-app>
