@@ -35,7 +35,7 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
   }, [])
 
   const [chartData, setChartData] = useState<any[]>([])
-  const [forecastData, setForecastData] = useState<any>([])
+  const [forecastData, setForecastData] = useState<any[]>([])
   const [targetDate, setTargetDate] = useState<Date>(new Date())
   const [loading, setLoading] = useState(false)
 
