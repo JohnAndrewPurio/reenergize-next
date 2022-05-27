@@ -26,7 +26,7 @@ const Menu: FC<MenuInterface> = ({ menuId, contentId, children }) => {
             <ion-menu side="start" menu-id={menuId} content-id={contentId} swipeGesture>
                 <ion-header translucent>
                     <ion-toolbar>
-                        <ion-avatar slot="start">
+                        <ion-avatar slot="start" class="ion-padding">
                             <ion-img src="/re-icon.png" alt="ReEnergize" />
                         </ion-avatar>
                         <ion-title>ReEnergize</ion-title>

@@ -9,8 +9,9 @@ import Toolbar from '../../components/Toolbar'
 import { useUserLocation } from '../../context/Location'
 import { roundAccurately } from '../../utils/Numbers'
 import { glossary, units } from '../../api/Solcast/glossary'
-import Loading from '../../components/Loading/Loading'
 import { loadingController } from '@ionic/core'
+import { downloadOutline } from 'ionicons/icons'
+import { writeToFile } from '../../utils/Filesystem'
 
 interface ForecastsProps {
   apiUrl: string
@@ -63,11 +64,30 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
     setChartData(data)
   }
 
+  const downloadData = async () => {
+    if (!location)
+      return
+
+    const { latitude, longitude } = location
+    const format = "csv"
+    const path = `/forecasts/${new Date().toDateString()}.${format}`
+
+    try {
+      const data = await getWorldRadiationForecasts(apiUrl, latitude, longitude, 72, format) as any
+
+      console.log(data)
+
+      writeToFile(data, path)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (!location)
       return
 
-    const { latitude: longitude, longitude: latitude } = location
+    const { latitude, longitude } = location
 
     const retrieveData = async () => {
       try {
@@ -110,7 +130,7 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
     if (!location)
       return
 
-    const { latitude: longitude, longitude: latitude } = location
+    const { latitude, longitude } = location
 
     showCurrentData(targetDate, latitude, longitude)
 
@@ -163,32 +183,30 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
             <ion-card class="ion-padding ion-margin">
               <ion-card-content>
                 <ion-list>
-                  <ion-item-group>
-                    <ion-list-header>
-                      <ion-label>Daytime Averages</ion-label>
-                    </ion-list-header>
-                    {
-                      Object.entries(dataSums).map(([key, value]) => (
-                        <ion-item key={key}>
-                          <ion-label>
-                            <h5>
-                              {
-                                //@ts-ignore
-                                glossary[key]
-                              }:
-                            </h5>
-                            <p>{roundAccurately(value as number / chartData.length, 4)}</p>
-                          </ion-label>
-                          <ion-note slot="end">
+                  <ion-list-header>
+                    Daytime Averages
+                  </ion-list-header>
+                  {
+                    Object.entries(dataSums).map(([key, value]) => (
+                      <ion-item key={key}>
+                        <ion-label>
+                          <h5>
                             {
                               //@ts-ignore
-                              units[key]
-                            }
-                          </ion-note>
-                        </ion-item>
-                      ))
-                    }
-                  </ion-item-group>
+                              glossary[key]
+                            }:
+                          </h5>
+                          <p>{roundAccurately(value as number / chartData.length, 4)}</p>
+                        </ion-label>
+                        <ion-note slot="end">
+                          {
+                            //@ts-ignore
+                            units[key]
+                          }
+                        </ion-note>
+                      </ion-item>
+                    ))
+                  }
                 </ion-list>
               </ion-card-content>
             </ion-card>
@@ -202,6 +220,11 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
           }
         `}</style>
       </ion-content>
+      <ion-fab vertical="bottom" horizontal="end">
+        <ion-fab-button onClick={downloadData}>
+          <ion-icon icon={downloadOutline} />
+        </ion-fab-button>
+      </ion-fab>
     </>
   )
 }

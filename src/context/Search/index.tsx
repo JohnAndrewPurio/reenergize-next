@@ -48,7 +48,7 @@ export const SearchModalProvider: FC<SearchModalInterface> = ({ children, search
 
     const selectHandler = (data: SearchResult) => {
         const { center, text } = data
-        const [latitude, longitude] = center
+        const [longitude, latitude] = center
 
         setIsOpen(false)
         setLocationData({

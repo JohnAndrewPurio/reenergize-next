@@ -23,6 +23,8 @@ export const UserLocationProvider: FC = ({ children }) => {
     const [ data, setData ] = useState<UserLocationInterface | void>()
 
     useEffect(() => {
+        console.log("Current Location data:", data)
+
         storeValue("location", data)
     }, [data])
 

@@ -9,6 +9,8 @@ import { routes } from "../../utils/Navigation/routes"
 
 import Content from "./Content"
 import SolarMap from "../SolarMap"
+import { writeToFile } from "../../utils/Filesystem"
+import { Capacitor } from "@capacitor/core"
 
 interface HomeInterface {
     menuParameters: {

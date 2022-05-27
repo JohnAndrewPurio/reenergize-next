@@ -1,5 +1,5 @@
 const SolarMap = () => {
-    const targetDate = new Date( Date.now() - (24 * 60 * 60 * 1000) )
+    const targetDate = new Date( Date.now() - (48 * 60 * 60 * 1000) )
 
     const [month, date, year] = Intl.DateTimeFormat().format(targetDate).split("/")
     const formattedDate = `${year}-${("0" + month).substr(-2)}-${("0" + date).substr(-2)}`

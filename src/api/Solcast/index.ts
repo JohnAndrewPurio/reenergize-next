@@ -1,10 +1,13 @@
 import type { WorldRadiationEstimatesData, WorldRadiationForecastData } from "./constants"
 
-export const getWorldRadiationForecasts = async (baseUrl: string, latitude: number, longitude: number, hours?: number) => {
+export type ResponseFormat = "csv" | "json" | "xml"
+
+export const getWorldRadiationForecasts = async (baseUrl: string, latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json") => {
     const url = new URL("/solcast/world_radiation/forecasts", baseUrl)
     const url_params = new URLSearchParams({
         latitude: String(latitude), 
-        longitude: String(longitude)
+        longitude: String(longitude),
+        format
     })
 
     if(hours)
@@ -22,11 +25,12 @@ export const getWorldRadiationForecasts = async (baseUrl: string, latitude: numb
     }
 }
 
-export const getWorldRadiationEstimatedActuals = async (baseUrl: string, latitude: number, longitude: number, hours?: number) => {
+export const getWorldRadiationEstimatedActuals = async (baseUrl: string, latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json") => {
     const url = new URL("/solcast/world_radiation/estimated_actuals", baseUrl)
     const url_params = new URLSearchParams({
         latitude: String(latitude), 
-        longitude: String(longitude)
+        longitude: String(longitude),
+        format
     })
 
     if(hours)
