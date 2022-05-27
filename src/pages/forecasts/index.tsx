@@ -78,7 +78,7 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
     const path = `/forecasts/${fileName}`
 
     try {
-      const data = await getWorldRadiationForecasts(apiUrl, latitude, longitude, 72, format) as any
+      const data = await getWorldRadiationForecasts(latitude, longitude, 72, format, apiUrl) as any
 
       await writeToFile(data, path)
 
@@ -129,8 +129,8 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
 
     const retrieveData = async () => {
       try {
-        const forecasts = await getWorldRadiationForecasts(apiUrl, latitude, longitude)
-        const estimates = await getWorldRadiationEstimatedActuals(apiUrl, latitude, longitude)
+        const forecasts = await getWorldRadiationForecasts(latitude, longitude, 72, "json", apiUrl)
+        const estimates = await getWorldRadiationEstimatedActuals(latitude, longitude, 72, "json", apiUrl)
 
         setForecastData([
           ...forecasts.forecasts,

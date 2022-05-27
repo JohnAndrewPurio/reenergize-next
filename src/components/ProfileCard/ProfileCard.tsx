@@ -1,21 +1,46 @@
-import { logOutOutline, mailOutline, personCircleOutline } from "ionicons/icons"
+import { ToggleChangeEventDetail } from "@ionic/core"
+import { logOutOutline, mailOutline, moonOutline, personCircleOutline } from "ionicons/icons"
+import { useEffect, useRef } from "react"
 import { getCurrentUser, signOut } from "../../api/Firebase/authentication"
+import { useTheme } from "../../context/Theme"
 import { useUserInfo } from "../../context/User"
+import { toggleDarkMode } from "../../utils/Theme"
 
 const ProfileCard = () => {
+    const toggleRef = useRef<HTMLIonToggleElement>()
     const { data: userData, setData: setUserData } = useUserInfo()
+    const { isDark, setIsDark } = useTheme()
 
     const signOutUser = async () => {
         try {
             const data = await signOut()
-
-            console.log(data)
 
             setUserData(data)
         } catch (error) {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        if (!toggleRef.current)
+            return
+
+        toggleRef.current.addEventListener("ionChange", (e) => {
+            const event = e as CustomEvent<ToggleChangeEventDetail<any>>
+            const isDarkMode = event.detail.checked
+
+            setIsDark(isDarkMode)
+        })
+
+        setTimeout(() => {
+            if (!toggleRef.current)
+                return
+
+            toggleRef.current.checked = isDark
+        }, 50)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <ion-grid>
@@ -30,6 +55,13 @@ const ProfileCard = () => {
             <ion-row>
                 <ion-col size="12">
                     <ion-list>
+                        <ion-item>
+                            <ion-icon icon={moonOutline} slot="start" />
+                            <ion-label>
+                                Dark Mode
+                            </ion-label>
+                            <ion-toggle ref={toggleRef} slot="end" />
+                        </ion-item>
                         <ion-item-group>
                             <ion-list-header>
                                 <h4>User Info</h4>

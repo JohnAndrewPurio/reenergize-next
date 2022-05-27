@@ -9,6 +9,7 @@ import { routes } from '../utils/Navigation/routes'
 
 import Head from 'next/head'
 import ErrorBoundary from '../components/error_handlers/ErrorBoundary'
+import ContextProviders from '../context'
 
 import '../styles/globals.css'
 import '../styles/dark.css'
@@ -27,8 +28,6 @@ import '@ionic/core/css/text-alignment.css'
 import '@ionic/core/css/text-transformation.css'
 import '@ionic/core/css/flex-utils.css'
 import '@ionic/core/css/display.css'
-import { UserInfoProvider } from '../context/User'
-import { UserLocationProvider } from '../context/Location'
 
 
 type ToReact<T> = {
@@ -81,11 +80,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ion-app>
         <ErrorBoundary>
-          <UserInfoProvider>
-            <UserLocationProvider>
-              <Component {...pageProps} />
-            </UserLocationProvider>
-          </UserInfoProvider>
+          <ContextProviders>
+            <Component {...pageProps} />
+          </ContextProviders>
         </ErrorBoundary>
       </ion-app>
     </>

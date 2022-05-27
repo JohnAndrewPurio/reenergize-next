@@ -1,8 +1,9 @@
+import { apiBaseUrl } from "../constants"
 import type { WorldRadiationEstimatesData, WorldRadiationForecastData } from "./constants"
 
 export type ResponseFormat = "csv" | "json" | "xml"
 
-export const getWorldRadiationForecasts = async (baseUrl: string, latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json") => {
+export const getWorldRadiationForecasts = async (latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json", baseUrl = apiBaseUrl) => {
     const url = new URL("/solcast/world_radiation/forecasts", baseUrl)
     const url_params = new URLSearchParams({
         latitude: String(latitude), 
@@ -25,7 +26,7 @@ export const getWorldRadiationForecasts = async (baseUrl: string, latitude: numb
     }
 }
 
-export const getWorldRadiationEstimatedActuals = async (baseUrl: string, latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json") => {
+export const getWorldRadiationEstimatedActuals = async (latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json", baseUrl = apiBaseUrl) => {
     const url = new URL("/solcast/world_radiation/estimated_actuals", baseUrl)
     const url_params = new URLSearchParams({
         latitude: String(latitude), 
@@ -41,6 +42,38 @@ export const getWorldRadiationEstimatedActuals = async (baseUrl: string, latitud
     try {
         const fetchedData = await fetch(url.toString())
         const jsonData: WorldRadiationEstimatesData = await fetchedData.json()
+
+        return jsonData
+    } catch (error) {
+        throw error
+    }
+}
+
+interface PVPowerOptions {
+    tilt: number
+    azimuth: number
+    install_date: string
+    loss_factor: number
+    hours: number
+}
+
+export const getPvPowerForecasts = async (latitude: number, longitude: number, capacity: number, options?: PVPowerOptions, baseUrl = apiBaseUrl) => {
+    const url = new URL("/solcast/world_pv_power/forecasts", baseUrl)
+    const url_params = new URLSearchParams({
+        latitude: String(latitude), 
+        longitude: String(longitude), 
+        capacity: String(capacity)
+    })
+
+    if(options) {
+        for(let key in options) {
+            url_params.append(key, String(options[key as keyof PVPowerOptions]))
+        }
+    }
+
+    try {
+        const fetchedData = await fetch(url.toString())
+        const jsonData = await fetchedData.json()
 
         return jsonData
     } catch (error) {
