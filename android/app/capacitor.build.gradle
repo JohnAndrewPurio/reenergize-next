@@ -14,8 +14,10 @@ dependencies {
     implementation project(':capacitor-filesystem')
     implementation project(':capacitor-geolocation')
     implementation project(':capacitor-google-maps')
+    implementation project(':capacitor-local-notifications')
     implementation project(':capacitor-storage')
     implementation project(':capacitor-toast')
+    implementation project(':whiteguru-capacitor-plugin-file-opener')
 
 }
 

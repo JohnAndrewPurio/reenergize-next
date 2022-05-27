@@ -4,12 +4,10 @@ import { getCurrentPosition } from "../../utils/GeoLocation"
 
 import styles from "./styles.module.css"
 
-const Content = () => {
+const GetCurrentLocation = () => {
   const { data: locationData, setData: setLocationData } = useUserLocation()
 
   const promptUserLocation = async () => {
-    console.log("User Location Prompted!!")
-
     try {
       const { coords } = await getCurrentPosition()
       const { latitude, longitude } = coords
@@ -41,4 +39,4 @@ const Content = () => {
   )
 }
 
-export default Content
+export default GetCurrentLocation

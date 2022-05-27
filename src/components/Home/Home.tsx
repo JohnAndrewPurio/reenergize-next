@@ -7,10 +7,8 @@ import { useUserInfo } from "../../context/User"
 import { getForwardGeocoding } from "../../api/Mapbox"
 import { routes } from "../../utils/Navigation/routes"
 
-import Content from "./Content"
 import SolarMap from "../SolarMap"
-import { writeToFile } from "../../utils/Filesystem"
-import { Capacitor } from "@capacitor/core"
+import GetCurrentLocation from "./GetCurrentLocation"
 
 interface HomeInterface {
     menuParameters: {
@@ -45,7 +43,7 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
         }
 
         try {
-            const { features } = await getForwardGeocoding(apiUrl, value)
+            const { features } = await getForwardGeocoding(value, apiUrl)
 
             console.log("Search Results:", features)
 
@@ -88,7 +86,7 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
             </ion-header>
             <ion-content fullscreen>
                 <SolarMap />
-                <Content />
+                <GetCurrentLocation />
             </ion-content>
 
             <ion-fab vertical="bottom" horizontal="end">

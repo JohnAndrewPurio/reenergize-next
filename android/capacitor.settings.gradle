@@ -17,8 +17,14 @@ project(':capacitor-geolocation').projectDir = new File('../node_modules/@capaci
 include ':capacitor-google-maps'
 project(':capacitor-google-maps').projectDir = new File('../node_modules/@capacitor/google-maps/android')
 
+include ':capacitor-local-notifications'
+project(':capacitor-local-notifications').projectDir = new File('../node_modules/@capacitor/local-notifications/android')
+
 include ':capacitor-storage'
 project(':capacitor-storage').projectDir = new File('../node_modules/@capacitor/storage/android')
 
 include ':capacitor-toast'
 project(':capacitor-toast').projectDir = new File('../node_modules/@capacitor/toast/android')
+
+include ':whiteguru-capacitor-plugin-file-opener'
+project(':whiteguru-capacitor-plugin-file-opener').projectDir = new File('../node_modules/@whiteguru/capacitor-plugin-file-opener/android')

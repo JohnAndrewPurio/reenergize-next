@@ -11,6 +11,7 @@ import Head from 'next/head'
 import ErrorBoundary from '../components/error_handlers/ErrorBoundary'
 
 import '../styles/globals.css'
+import '../styles/dark.css'
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/core/css/core.css'
 

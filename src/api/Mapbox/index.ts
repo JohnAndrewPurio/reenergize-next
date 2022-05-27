@@ -1,6 +1,7 @@
 import { ForwardGeocodingData, ReverseGeocodingData } from "./constants"
+import { apiBaseUrl } from "../constants"
 
-export const getForwardGeocoding = async (baseUrl: string, location: string) => {
+export const getForwardGeocoding = async (location: string, baseUrl: string = apiBaseUrl) => {
     const url = new URL("/mapbox/geocoding/v5/mapbox.places", baseUrl)
     const url_params = new URLSearchParams({
         location
@@ -18,7 +19,7 @@ export const getForwardGeocoding = async (baseUrl: string, location: string) => 
     }
 }
 
-export const getReverseGeocoding = async (baseUrl: string, latitude: string, longitude: string) => {
+export const getReverseGeocoding = async (latitude: string, longitude: string, baseUrl: string = apiBaseUrl) => {
     const url = new URL("/mapbox/geocoding/v5/mapbox.places", baseUrl)
     const url_params = new URLSearchParams({
         latitude, longitude

@@ -11,7 +11,11 @@ import { roundAccurately } from '../../utils/Numbers'
 import { glossary, units } from '../../api/Solcast/glossary'
 import { loadingController } from '@ionic/core'
 import { downloadOutline } from 'ionicons/icons'
-import { writeToFile } from '../../utils/Filesystem'
+import { getFileUri, openFile, writeToFile } from '../../utils/Filesystem'
+import { showNotification } from '../../utils/Notifications'
+import { ActionPerformed, LocalNotifications } from '@capacitor/local-notifications'
+import { showToast } from '../../utils/Toast'
+import GetCurrentLocation from '../../components/Home/GetCurrentLocation'
 
 interface ForecastsProps {
   apiUrl: string
@@ -70,16 +74,50 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
 
     const { latitude, longitude } = location
     const format = "csv"
-    const path = `/forecasts/${new Date().toDateString()}.${format}`
+    const fileName = `${new Date().toDateString()}.${format}`
+    const path = `/forecasts/${fileName}`
 
     try {
       const data = await getWorldRadiationForecasts(apiUrl, latitude, longitude, 72, format) as any
 
-      console.log(data)
+      await writeToFile(data, path)
 
-      writeToFile(data, path)
-    } catch (error) {
-      console.log(error)
+      const { uri } = await getFileUri(path)
+
+      console.log("Uri:", uri)
+
+      showNotification([
+        {
+          id: 1,
+          title: "File downloaded",
+          body: "/storage/emulated/0/Documents/ReEnergize" + path,
+          smallIcon: "small.png",
+          largeIcon: "large.png"
+        }
+      ])
+
+      const tapHandler = async (event: ActionPerformed) => {
+        if (event.actionId !== "tap")
+          return
+
+        try {
+          await openFile(uri)
+        } catch (error) {
+          console.log(error)
+        } finally {
+          LocalNotifications.removeAllListeners()
+        }
+      }
+
+      LocalNotifications.addListener("localNotificationActionPerformed", tapHandler)
+    } catch (e) {
+      const { message } = e as Error
+
+      console.log(message)
+      showToast({
+        text: message,
+        duration: "long"
+      })
     }
   }
 
@@ -144,7 +182,7 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
           <Toolbar name='Forecasts' />
         </ion-header>
         <ion-content>
-          <ion-text color="danger">Missing Coordinates</ion-text>
+          <GetCurrentLocation />
         </ion-content>
       </>
     )
@@ -220,11 +258,14 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
           }
         `}</style>
       </ion-content>
-      <ion-fab vertical="bottom" horizontal="end">
-        <ion-fab-button onClick={downloadData}>
-          <ion-icon icon={downloadOutline} />
-        </ion-fab-button>
-      </ion-fab>
+      {
+        !loading &&
+        <ion-fab vertical="bottom" horizontal="end">
+          <ion-fab-button onClick={downloadData}>
+            <ion-icon icon={downloadOutline} />
+          </ion-fab-button>
+        </ion-fab>
+      }
     </>
   )
 }
