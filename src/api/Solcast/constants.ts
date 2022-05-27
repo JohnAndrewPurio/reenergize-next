@@ -1,13 +1,13 @@
 export const worldRadiationForecasts = {
-    ghi: "Global Horizontal Irradiance",
-    dni: "Direct Normal Irradiance",
-    dhi: "Diffuse Horizontal Irradiance",
-    air_temp: "Air temperature",
-    zenith: "Solar Zenith Angle",
-    azimuth: "Solar Azimuth Angle",
-    cloud_opacity: "Cloud Opacity",
-    period_end: "Period End",
-    period: "Period"
+	ghi: "Global Horizontal Irradiance",
+	dni: "Direct Normal Irradiance",
+	dhi: "Diffuse Horizontal Irradiance",
+	air_temp: "Air temperature",
+	zenith: "Solar Zenith Angle",
+	azimuth: "Solar Azimuth Angle",
+	cloud_opacity: "Cloud Opacity",
+	period_end: "Period End",
+	period: "Period"
 }
 
 export const sampleForecastData = {
@@ -1677,8 +1677,34 @@ export const sampleEstimateData = {
 	]
 }
 
+export const samplePVPowerForecastData = {
+	"forecasts": [
+		{
+			"pv_estimate": 0,
+			"period_end": "2022-05-27T18:30:00.0000000Z",
+			"period": "PT30M"
+		}
+	]
+}
+
+export const samplePVPowerEstimatesData = {
+	"estimated_actuals": [
+		{
+			"pv_estimate": 0,
+			"period_end": "2022-05-27T18:30:00.0000000Z",
+			"period": "PT30M"
+		},
+	]
+}
+
 type WorldRadiationForecastDataType = typeof sampleForecastData
 type WorldRadiationEstimatesDataType = typeof sampleEstimateData
 
-export interface WorldRadiationForecastData extends WorldRadiationForecastDataType {}
-export interface WorldRadiationEstimatesData extends WorldRadiationEstimatesDataType {}
+type PVPowerForecastDataType = typeof samplePVPowerForecastData
+type PVPowerEstimatesDataType = typeof samplePVPowerEstimatesData
+
+export interface WorldRadiationForecastData extends WorldRadiationForecastDataType { }
+export interface WorldRadiationEstimatesData extends WorldRadiationEstimatesDataType { }
+
+export interface PVPowerForecastData extends PVPowerForecastDataType { }
+export interface PVPowerEstimatesData extends PVPowerEstimatesDataType { }

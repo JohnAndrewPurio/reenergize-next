@@ -1,23 +1,33 @@
 import { compassOutline, locationOutline, mapOutline, navigateCircleOutline } from "ionicons/icons"
 import { useUserLocation } from "../../context/Location"
 import { getCurrentPosition } from "../../utils/GeoLocation"
+import { nativeReverseGeocoding } from "../../utils/GeoLocation/native"
 
 import styles from "./styles.module.css"
 
 const GetCurrentLocation = () => {
-  const { data: locationData, setData: setLocationData } = useUserLocation()
+  const { setData: setLocationData } = useUserLocation()
 
   const promptUserLocation = async () => {
     try {
       const { coords } = await getCurrentPosition()
       const { latitude, longitude } = coords
 
-      const data = locationData || {}
+      const data = await nativeReverseGeocoding(latitude, longitude)
+
+      let address = ""
+
+      if(data && data[0]) {
+        const [ place ] = data
+        const { administrativeArea, countryName, subAdministrativeArea, locality } = place
+        
+        address = `${locality}, ${subAdministrativeArea}, ${administrativeArea}, ${countryName}`
+      }
 
       setLocationData({
-        ...data,
         latitude,
-        longitude
+        longitude,
+        address
       })
     } catch (error) {
       console.log(error)

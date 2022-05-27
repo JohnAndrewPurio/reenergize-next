@@ -21,6 +21,8 @@ interface ForecastsProps {
   apiUrl: string
 }
 
+const dateFormatOptions: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+
 const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
   const { data: location } = useUserLocation()
 
@@ -198,24 +200,22 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
           !loading && <>
             <ion-card class="ion-padding ion-margin">
               <div className="chart">
-                {
-                  chartData &&
-                  <DataChart
-                    labels={chartData.map(({ period_end }) => new Date(period_end))}
-                    chartData={[
-                      {
-                        label: "GHI (W/m2)",
-                        borderColor: "#9ACD32",
-                        data: chartData.map(({ ghi }) => ghi),
-                        borderJoinStyle: "round",
-                        fill: "start"
-                      }
-                    ]}
-                  />
-                }
+                <DataChart
+                  labels={chartData.map(({ period_end }) => new Date(period_end))}
+                  chartData={[
+                    {
+                      label: "GHI (W/m2)",
+                      borderColor: "#9ACD32",
+                      data: chartData.map(({ ghi }) => ghi),
+                      borderJoinStyle: "round",
+                      fill: "start"
+                    }
+                  ]}
+                />
               </div>
               <ion-card-header>
-                <ion-card-subtitle>Lucena, Quezon</ion-card-subtitle>
+                <ion-card-title class="ion-text-center">{targetDate.toLocaleDateString(undefined, dateFormatOptions)}</ion-card-title>
+                <ion-card-subtitle class="ion-text-center">{location.address}</ion-card-subtitle>
               </ion-card-header>
             </ion-card>
             <ion-card class="ion-padding ion-margin">

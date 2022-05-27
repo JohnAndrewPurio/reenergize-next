@@ -1,11 +1,10 @@
 import { createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react"
-import { getReverseGeocoding } from "../../api/Mapbox"
 import { getValue, storeValue } from "../../utils/Storage"
 
 export interface UserLocationInterface {
     latitude: number
     longitude: number
-    address?: string
+    address: string
 }
 
 interface ContextInterface {
@@ -33,32 +32,11 @@ export const UserLocationProvider: FC = ({ children }) => {
         }
     }
 
-    const checkAddress = async () => {
-        if (!data || data.address)
-            return
-
-        const { latitude, longitude } = data
-        try {
-            const { features } = await getReverseGeocoding(String(latitude), String(longitude))
-            const { place_name: address } = features[0]
-
-            setData({
-                ...data,
-                address
-            })
-        } catch (error) {
-            console.log([error])
-        }
-    }
-
     useEffect(() => {
         getCachedValue()
     }, [])
 
     useEffect(() => {
-        console.log("Location:", data)
-
-        checkAddress()
         storeValue("location", data)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
