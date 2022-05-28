@@ -35,7 +35,7 @@ const GetCurrentLocation = () => {
   }
 
   return (
-    <ion-grid class={styles.grid}>
+    <ion-grid class={`${styles.grid} ion-margin`}>
       <ion-row class="ion-justify-content-center ion-padding">
         <ion-icon class={styles.mapIcon} icon={compassOutline} color="tertiary" />
       </ion-row>

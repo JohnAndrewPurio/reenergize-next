@@ -37,6 +37,8 @@ export const UserLocationProvider: FC = ({ children }) => {
     }, [])
 
     useEffect(() => {
+        console.log("Location:", data)
+
         storeValue("location", data)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

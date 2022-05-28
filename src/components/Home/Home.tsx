@@ -9,6 +9,9 @@ import { routes } from "../../utils/Navigation/routes"
 
 import SolarMap from "../SolarMap"
 import GetCurrentLocation from "./GetCurrentLocation"
+import { useUserLocation } from "../../context/Location"
+import WeatherCard from "../WeatherCard"
+import { WeatherProvider } from "../../context/Weather"
 
 interface HomeInterface {
     menuParameters: {
@@ -21,6 +24,7 @@ interface HomeInterface {
 const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
     const router = useRouter()
     const { data: userData } = useUserInfo()
+    const { data: location } = useUserLocation()
     const {
         setIsOpen, setSearchHandler, setData: setSearchResultsData
     } = useSearchModal()
@@ -85,8 +89,13 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
                 </ion-toolbar>
             </ion-header>
             <ion-content fullscreen>
+                {
+                    !location ? <GetCurrentLocation /> :
+                        <WeatherProvider location={location}>
+                            <WeatherCard />
+                        </WeatherProvider>
+                }
                 <SolarMap />
-                <GetCurrentLocation />
             </ion-content>
 
             <ion-fab vertical="bottom" horizontal="end">
