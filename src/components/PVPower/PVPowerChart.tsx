@@ -144,6 +144,7 @@ const PVPowerChart: FC<PVPowerChartProps> = ({ config, apiUrl }) => {
                 <ion-card class="ion-padding ion-margin">
                     <div className="chart">
                         <DataChart
+                            id="chart"
                             labels={chartData.map(({ period_end }) => new Date(period_end))}
                             chartData={[
                                 {

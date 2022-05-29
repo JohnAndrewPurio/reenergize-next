@@ -6,12 +6,12 @@ export type ResponseFormat = "csv" | "json" | "xml"
 export const getWorldRadiationForecasts = async (latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json", baseUrl = apiBaseUrl) => {
     const url = new URL("/solcast/world_radiation/forecasts", baseUrl)
     const url_params = new URLSearchParams({
-        latitude: String(latitude), 
+        latitude: String(latitude),
         longitude: String(longitude),
         format
     })
 
-    if(hours)
+    if (hours)
         url_params.append("hours", String(hours))
 
     url.search = url_params.toString()
@@ -19,6 +19,11 @@ export const getWorldRadiationForecasts = async (latitude: number, longitude: nu
     try {
         const fetchedData = await fetch(url.toString())
         const jsonData: WorldRadiationForecastData = await fetchedData.json()
+
+        if (fetchedData.status >= 400) {
+            // @ts-ignore
+            throw new Error(jsonData.message)
+        }
 
         return jsonData
     } catch (error) {
@@ -29,12 +34,12 @@ export const getWorldRadiationForecasts = async (latitude: number, longitude: nu
 export const getWorldRadiationEstimatedActuals = async (latitude: number, longitude: number, hours?: number, format: ResponseFormat = "json", baseUrl = apiBaseUrl) => {
     const url = new URL("/solcast/world_radiation/estimated_actuals", baseUrl)
     const url_params = new URLSearchParams({
-        latitude: String(latitude), 
+        latitude: String(latitude),
         longitude: String(longitude),
         format
     })
 
-    if(hours)
+    if (hours)
         url_params.append("hours", String(hours))
 
     url.search = url_params.toString()
@@ -43,6 +48,11 @@ export const getWorldRadiationEstimatedActuals = async (latitude: number, longit
         const fetchedData = await fetch(url.toString())
         const jsonData: WorldRadiationEstimatesData = await fetchedData.json()
 
+        if (fetchedData.status >= 400) {
+            // @ts-ignore
+            throw new Error(jsonData.message)
+        }
+        
         return jsonData
     } catch (error) {
         throw error
@@ -60,14 +70,14 @@ export interface PVPowerOptions {
 export const getPvPowerForecasts = async (latitude: number, longitude: number, capacity: number, options?: PVPowerOptions, baseUrl = apiBaseUrl) => {
     const url = new URL("/solcast/world_pv_power/forecasts", baseUrl)
     const url_params = new URLSearchParams({
-        latitude: String(latitude), 
-        longitude: String(longitude), 
+        latitude: String(latitude),
+        longitude: String(longitude),
         capacity: String(capacity)
     })
 
-    if(options) {
-        for(let key in options) {
-            if(!options[key as keyof PVPowerOptions])
+    if (options) {
+        for (let key in options) {
+            if (!options[key as keyof PVPowerOptions])
                 continue
 
             url_params.append(key, String(options[key as keyof PVPowerOptions]))
@@ -94,9 +104,9 @@ export const getPvPowerEstimatedActuals = async (latitude: number, longitude: nu
         capacity: String(capacity)
     })
 
-    if(options) {
-        for(let key in options) {
-            if(!options[key as keyof PVPowerOptions])
+    if (options) {
+        for (let key in options) {
+            if (!options[key as keyof PVPowerOptions])
                 continue
 
             url_params.append(key, String(options[key as keyof PVPowerOptions]))

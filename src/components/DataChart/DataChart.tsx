@@ -4,16 +4,17 @@ import { createChart } from "../../utils/Chart"
 import { BubbleDataPoint, ChartDataset, ChartTypeRegistry, ScatterDataPoint } from "chart.js"
 
 interface DataChartProps {
+  id: string
   labels: any[]
   chartData: ChartDataset<keyof ChartTypeRegistry, (number | ScatterDataPoint | BubbleDataPoint | null)[]>[]
 }
 
-const DataChart: FC<DataChartProps> = ({ labels, chartData }) => {
+const DataChart: FC<DataChartProps> = ({ id, labels, chartData }) => {
   useEffect(() => {
     const totalDuration = 2000;
     const delayBetweenPoints = totalDuration / labels.length;
 
-    const chart = createChart("canvas", {
+    const chart = createChart(id, {
       type: 'line',
       data: {
         labels,
@@ -75,7 +76,7 @@ const DataChart: FC<DataChartProps> = ({ labels, chartData }) => {
   })
 
   return (
-    <canvas id="canvas" aria-label="Solar Forecast Data Chart" role="img">
+    <canvas id={id} aria-label="Solar Forecast Data Chart" role="img">
       <p>Unable to fetch Solar Forecast Data</p>
     </canvas>
   )
