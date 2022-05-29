@@ -4,5 +4,6 @@ export const routes = {
     PV_POWER: "/pv/power",
     LOGIN: "/auth/login",
     SIGNUP: "/auth/signup",
-    PROFILE: "/user/profile"
+    PROFILE: "/user/profile",
+    GLOSSARY: "/glossary"
 }

@@ -1,6 +1,8 @@
 import { menuController } from "@ionic/core"
+import { bookOutline, homeOutline } from "ionicons/icons"
 import { useRouter } from "next/router"
 import { FC } from "react"
+import { routes } from "../../utils/Navigation/routes"
 import { camelCaseToNormalCase } from "../../utils/Text"
 import { menuContent } from "./content"
 
@@ -34,14 +36,28 @@ const Menu: FC<MenuInterface> = ({ menuId, contentId, children }) => {
                 </ion-header>
                 <ion-content>
                     <ion-list>
-                        {
-                            Object.entries(menuContent).map(([key, value]) => (
-                                <ion-item key={key} button onClick={() => redirectHandler(value.href)} lines="none">
-                                    <ion-icon icon={value.icon} slot="start" />
-                                    <ion-label>{camelCaseToNormalCase(key)}</ion-label>
-                                </ion-item>
-                            ))
-                        }
+                        <ion-item-group>
+                            <ion-item button onClick={() => redirectHandler(routes["DEFAULT"])} lines="none">
+                                <ion-icon icon={homeOutline} slot="start" />
+                                <ion-label>Home</ion-label>
+                            </ion-item>
+                            <ion-item button onClick={() => redirectHandler(routes["GLOSSARY"])} lines="none">
+                                <ion-icon icon={bookOutline} slot="start" />
+                                <ion-label>Terms Used</ion-label>
+                            </ion-item>
+                        </ion-item-group>
+                        <ion-item-group>
+                            <ion-list-header>Solar</ion-list-header>
+                            {
+                                Object.entries(menuContent).map(([key, value]) => (
+                                    <ion-item key={key} button onClick={() => redirectHandler(value.href)} lines="none">
+                                        <ion-icon icon={value.icon} slot="start" />
+                                        <ion-label>{camelCaseToNormalCase(key)}</ion-label>
+                                    </ion-item>
+                                ))
+                            }
+                        </ion-item-group>
+
                     </ion-list>
                 </ion-content>
             </ion-menu>

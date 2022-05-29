@@ -2,10 +2,6 @@ import { homeOutline, partlySunny, partlySunnyOutline, sunnyOutline } from "ioni
 import { routes } from "../../utils/Navigation/routes";
 
 export const menuContent = {
-    home: {
-        icon: homeOutline,
-        href: routes["DEFAULT"]
-    },
     forecasts: {
         icon: partlySunnyOutline,
         href: routes["FORECASTS"]

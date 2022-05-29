@@ -37,6 +37,11 @@ const SignUpCard = () => {
 
     return (
         <ion-grid class={styles.grid}>
+            <ion-row>
+                <ion-avatar slot="start" class="ion-padding">
+                    <ion-img src="/re-icon.png" alt="ReEnergize" />
+                </ion-avatar>
+            </ion-row>
             <ion-row class="ion-justify-content-center">
                 <ion-card>
                     <ion-card-header>

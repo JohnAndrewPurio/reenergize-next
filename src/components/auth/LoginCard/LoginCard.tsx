@@ -43,18 +43,18 @@ const LoginCard = () => {
             <ion-row class="ion-justify-content-center">
                 <ion-card>
                     <ion-card-header>
-                        <ion-card-title class="ion-text-center">ReEnergize Login</ion-card-title>
+                        <ion-card-title class="ion-text-center">ReEnergize</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list>
                             <form onSubmit={formHandler}>
                                 <ion-item>
                                     <ion-icon icon={mailOutline} slot="start" />
-                                    <ion-input placeholder="Email" type="email" name="email" required aria-required />
+                                    <ion-input placeholder="Email" type="email" name="email" required />
                                 </ion-item>
                                 <ion-item>
                                     <ion-icon icon={lockClosedOutline} slot="start" />
-                                    <ion-input placeholder="Password" type="password" name="password" required aria-required />
+                                    <ion-input placeholder="Password" type="password" name="password" required />
                                 </ion-item>
                                 <ion-item lines="none">
                                     <ion-grid>
@@ -76,7 +76,7 @@ const LoginCard = () => {
                                     <ion-row class="ion-justify-content-center">
                                         <ion-button size="default" color="secondary" onClick={googleSignIn}>
                                             <ion-icon icon={logoGoogle} slot="start" />
-                                            Sign In with Google 
+                                            Sign In with Google
                                         </ion-button>
                                     </ion-row>
                                 </ion-grid>

@@ -39,11 +39,14 @@ export const WeatherProvider: FC<WeatherProviderProps> = ({ children, location }
     }
 
     const retrieveCachedData = async () => {
+        const { latitude, longitude } = location
+
         try {
+            const today = await getValue("today")
             const data = await getValue("weather")
 
-            if (!data) {
-                await fetchWeatherData
+            if (!data && today !== new Date().toDateString()) {
+                await fetchWeatherData(latitude, longitude)
 
                 return
             }
@@ -59,6 +62,7 @@ export const WeatherProvider: FC<WeatherProviderProps> = ({ children, location }
     useEffect(() => {
         retrieveCachedData()
 
+        storeValue("today", new Date().toDateString())
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
