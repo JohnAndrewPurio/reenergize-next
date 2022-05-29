@@ -1,6 +1,14 @@
 export const apiBaseUrl = "https://reenergize-server.herokuapp.com/"
 
-export const terms = {
+interface GlossaryInterface {
+    [key: string]: {
+        name: string,
+        description: string,
+        more: string
+    }
+}
+
+export const terms: GlossaryInterface = {
     azimuth: {
         name: "Azimuth",
         description: "The angle (degrees) from true north that the PV system is facing, if titled. Must be between -180 and 180. An azimuth of 0 means the system is facing true north. Positive values are anticlockwise, so azimuth is -90 for an east-facing system and 135 for a southwest-facing system. The default value is 0 (north facing) in the southern hemisphere, 180 (south-facing) in the northern hemisphere.",
@@ -9,6 +17,11 @@ export const terms = {
     capacity: {
         name: "Capacity",
         description: "The capacity of the inverter (AC) or the modules (DC), whichever is greater. Units in kilowatts.",
+        more: ""
+    },
+    cloud_opacity: {
+        name: "Cloud Opacity",
+        description: "The attenuation of incoming light due to cloud. Varies from 0 (no cloud) to 100 (full attenuation of incoming light).",
         more: ""
     },
     dni: {
@@ -36,9 +49,24 @@ export const terms = {
         description: "A factor by which to reduce your output forecast from the full capacity based on characteristics of the PV array or inverter. This is effectively the non-temperature loss effects on the nameplate rating of the PV system, including inefficiency and soiling. For a 1kW PV system anything that reduces 1000W/m2 solar radiation from producing 1000W of power output (assuming temperature is 25C). Valid values are between 0 and 1 (i.e 0.6 equals 60%). If you specify 0.6 your returned power will be a maximum of 60% of AC capacity.",
         more: ""
     },
+    period: {
+        name: "Period",
+        description: "Length of the averaging period in ISO8601 duration format",
+        more: "https://en.wikipedia.org/wiki/ISO_8601"
+    },
+    period_end: {
+        name: "Period End",
+        description: "End of the averaging period in ISO8601 datetime format in UTC timezone.",
+        more: "https://en.wikipedia.org/wiki/ISO_8601"
+    },
     tilt: {
         name: "Tilt",
         description: "The angle (degrees) that the PV system is tilted off the horizontal. Must be between 0 and 90. A tilt of 0 means the system is facing directly upwards, and 90 means the system is vertical and facing the horizon. The default value is 23.",
         more: "https://epsg.io/4326"
+    },
+    zenith: {
+        name: "Zenith",
+        description: "Solar zenith angle (degrees). Zero means directly upwards/overhead. Varies from 0 to 180. A value of 90 means the sun is at the horizon.",
+        more: ""
     }
 }

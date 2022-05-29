@@ -1,8 +1,9 @@
 import { terms } from "../../api/constants"
 
 const Glossary = () => {
-    // @ts-ignore
-    const alphabeticalGlossary: typeof terms = Object.entries(terms).reduce((acc, [key, value]) => {
+    const alphabeticalGlossary: {
+        [key: string]: typeof terms
+    } = Object.entries(terms).reduce((acc, [key, value]) => {
         const firstLetter = key[0] as keyof typeof terms
         // @ts-ignore
         if (!acc[firstLetter]) {
