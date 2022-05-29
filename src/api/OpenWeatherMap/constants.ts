@@ -1,3 +1,5 @@
+export const weatherIconUrl = "http://openweathermap.org/img/w"
+
 const sampleWeatherData = {
     "coord": {
         "lon": 122,

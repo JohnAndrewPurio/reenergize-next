@@ -1,16 +1,30 @@
+import { bookOutline } from "ionicons/icons"
 import { GetStaticProps, NextPage } from "next"
+import { useRouter } from "next/router"
 import PVPower from "../../../components/PVPower/PVPower"
 import Toolbar from "../../../components/Toolbar"
+import { routes } from "../../../utils/Navigation/routes"
 
 interface PowerProps {
     apiUrl: string
 }
 
 const Power: NextPage<PowerProps> = ({ apiUrl }) => {
+    const router = useRouter()
+
+    const redirectTo = (route: string) => {
+        router.push(route)
+    }
+
     return (
         <>
             <ion-header>
-                <Toolbar name="PV Power" />
+                <Toolbar name="PV Power" options={[
+                    {
+                        icon: bookOutline,
+                        handler: () => redirectTo(routes["GLOSSARY"])
+                    }
+                ]} />
             </ion-header>
             <ion-content>
                 <PVPower apiUrl={apiUrl} />

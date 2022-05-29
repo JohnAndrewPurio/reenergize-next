@@ -5,6 +5,9 @@ const config: CapacitorConfig = {
   appName: 'ReEnergize',
   webDir: 'out',
   bundledWebRuntime: false,
+  server: {
+    cleartext: true
+  },
   plugins: {
     FirebaseAuthentication: {
       skipNativeAuth: false,

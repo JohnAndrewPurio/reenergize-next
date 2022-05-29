@@ -5,13 +5,16 @@ import { getWorldRadiationEstimatedActuals, getWorldRadiationForecasts } from '.
 
 import { useUserLocation } from '../../context/Location'
 import { loadingController } from '@ionic/core'
-import { downloadOutline } from 'ionicons/icons'
+import { bookOutline, downloadOutline } from 'ionicons/icons'
 import { downloadData } from '../../utils/Notifications/downloadData'
 import { WorldRadiationData } from '../../api/Solcast/constants'
 
 import Toolbar from '../../components/Toolbar'
 import GetCurrentLocation from '../../components/Home/GetCurrentLocation'
 import ChartSlides from '../../components/ChartSlides'
+
+import { useRouter } from 'next/router'
+import { routes } from '../../utils/Navigation/routes'
 
 interface ForecastsProps {
   apiUrl: string
@@ -25,6 +28,7 @@ interface ChartSlidesDataInterface {
 }
 
 const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
+  const router = useRouter()
   const { data: location } = useUserLocation()
 
   const loader = useMemo(async () => {
@@ -38,6 +42,10 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
   const [chartSlidesData, setChartsSlideData] = useState<ChartSlidesDataInterface>({})
   const [forecastData, setForecastData] = useState<WorldRadiationData[]>([])
   const [loading, setLoading] = useState(false)
+
+  const redirectTo = (route: string) => {
+    router.push(route)
+  }
 
   useEffect(() => {
     if (!location)
@@ -183,7 +191,12 @@ const Forecasts: NextPage<ForecastsProps> = ({ apiUrl }) => {
   return (
     <>
       <ion-header translucent>
-        <Toolbar name='Forecasts' />
+        <Toolbar name='Forecasts' options={[
+          {
+            icon: bookOutline,
+            handler: () => redirectTo(routes["GLOSSARY"])
+          }
+        ]} />
       </ion-header>
       <ion-content fullscreen>
         {

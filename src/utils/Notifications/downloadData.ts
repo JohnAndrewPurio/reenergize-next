@@ -18,13 +18,11 @@ export const downloadData = async (location: UserLocationInterface, apiUrl?: str
 
         const { uri } = await getFileUri(path)
 
-        console.log("Uri:", uri)
-
         showNotification([
             {
                 id: 1,
                 title: "File downloaded",
-                body: "/storage/emulated/0/Documents/ReEnergize" + path,
+                body: "Documents/ReEnergize" + path,
                 smallIcon: "small.png",
                 largeIcon: "large.png"
             }
