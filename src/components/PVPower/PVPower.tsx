@@ -1,14 +1,24 @@
 import { CheckboxChangeEventDetail, TextFieldTypes } from "@ionic/core"
-import { batteryChargingOutline, checkmarkDoneOutline, searchCircleOutline, swapHorizontalOutline, swapVerticalOutline } from "ionicons/icons"
+import { batteryChargingOutline, swapHorizontalOutline, swapVerticalOutline } from "ionicons/icons"
 import { FC, FormEventHandler, useEffect, useRef, useState } from "react"
-import { getPvPowerForecasts } from "../../api/Solcast"
 import { definition } from "../../api/Solcast/glossary"
 import { useUserLocation } from "../../context/Location"
 import { showToast } from "../../utils/Toast"
+import Options from "./Options"
 import PVPowerChart from "./PVPowerChart"
 
 interface PVPowerInterface {
     apiUrl: string
+}
+
+interface ConfigInterface {
+    latitude: number,
+    longitude: number,
+    capacity: number,
+    azimuth?: number,
+    install_date?: string
+    tilt?: number,
+    loss_factor?: number
 }
 
 const locationParameters = [
@@ -34,15 +44,11 @@ const PVPower: FC<PVPowerInterface> = ({ apiUrl }) => {
     const latitudeInputRef = useRef<HTMLIonInputElement>()
     const longitudeInputRef = useRef<HTMLIonInputElement>()
     const checkBoxRef = useRef<HTMLIonCheckboxElement>()
-    
+
     const { data: location } = useUserLocation()
 
     const [usingCurrentLocation, setUsingCurrentLocation] = useState(false)
-    const [config, setConfig] = useState<{
-        latitude: number,
-        longitude: number,
-        capacity: number
-    }>()
+    const [config, setConfig] = useState<ConfigInterface>()
 
     const inputRefs = {
         latitude: latitudeInputRef,
@@ -52,16 +58,37 @@ const PVPower: FC<PVPowerInterface> = ({ apiUrl }) => {
     const formHandler: FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault()
 
-        console.log(event.target)
-
         const formData = new FormData(event.target as HTMLFormElement)
-        let { latitude, longitude, capacity } = Object.fromEntries(formData.entries())
+        const entries = Object.fromEntries(formData.entries())
+        let { latitude, longitude, capacity, azimuth, install_date, tilt, loss_factor } = entries
 
-        setConfig({
+        console.log("Entries:", entries)
+
+        const config: ConfigInterface = {
             latitude: Number(latitude || location?.latitude || 0),
             longitude: Number(longitude || location?.longitude || 0),
             capacity: Number(capacity)
-        })
+        }
+
+        if(azimuth) {
+            config["azimuth"] = Number(azimuth)
+        }
+
+        if(tilt) {
+            config["tilt"] = Number(tilt)
+        }
+
+        if(loss_factor) {
+            config["loss_factor"] = Number(loss_factor) / 100
+        }
+        
+        if(install_date) {
+            const date = new Date(install_date as string)
+
+            config["install_date"] = `${date.getFullYear()}-${("0" + String(date.getMonth() + 1)).substr(-2)}-${("0" + String(date.getDate())).substr(-2)}`
+        }
+
+        setConfig(config)
     }
 
     const showInfo = async (text: string) => {
@@ -87,10 +114,12 @@ const PVPower: FC<PVPowerInterface> = ({ apiUrl }) => {
     return (
         <ion-grid>
             <ion-row class="ion-justify-content-center">
-                <PVPowerChart 
-                    config={config}
-                    apiUrl={apiUrl}
-                />
+                <ion-col size="12">
+                    <PVPowerChart
+                        config={config}
+                        apiUrl={apiUrl}
+                    />
+                </ion-col>
             </ion-row>
             <ion-row>
                 <form onSubmit={formHandler}>
@@ -156,7 +185,12 @@ const PVPower: FC<PVPowerInterface> = ({ apiUrl }) => {
                                 <ion-note slot="end">kW</ion-note>
                             </ion-item>
                         </ion-item-group>
+
+                        <Options />
+
                     </ion-list>
+
+
                     <ion-grid>
                         <ion-row class="ion-justify-content-center">
                             <ion-button type="submit">

@@ -13,8 +13,8 @@ interface ContextInterface {
     data: SearchResult[]
     setData: Dispatch<SetStateAction<SearchResult[]>>
 
-    searchHandler: (event: CustomEvent<SearchbarChangeEventDetail>) => void
-    setSearchHandler: Dispatch<SetStateAction<(event: CustomEvent<SearchbarChangeEventDetail>) => void>>
+    searchHandler: (event: CustomEvent<SearchbarChangeEventDetail>, loadFn: Dispatch<SetStateAction<boolean>>) => Promise<void>
+    setSearchHandler: Dispatch<SetStateAction<(event: CustomEvent<SearchbarChangeEventDetail>, loadFn: Dispatch<SetStateAction<boolean>>) => Promise<void>>>
 }
 
 const SearchContext = createContext<ContextInterface>({
@@ -24,8 +24,8 @@ const SearchContext = createContext<ContextInterface>({
     data: [],
     setData: () => { },
 
-    searchHandler: (event: CustomEvent<SearchbarChangeEventDetail>) => { },
-    setSearchHandler: () => { }
+    searchHandler: async (event: CustomEvent<SearchbarChangeEventDetail>, loadFn: Dispatch<SetStateAction<boolean>>) => { },
+    setSearchHandler: async () => { }
 })
 
 export const useSearchModal = () => useContext(SearchContext)
@@ -40,7 +40,8 @@ export const SearchModalProvider: FC<SearchModalInterface> = ({ children, search
 
     const [data, setData] = useState<SearchResult[]>([])
     const [isOpen, setIsOpen] = useState(false)
-    const [searchHandler, setSearchHandler] = useState(() => (event: CustomEvent<SearchbarChangeEventDetail>) => { })
+    const [loading, setLoading] = useState(false)
+    const [searchHandler, setSearchHandler] = useState(() => async (event: CustomEvent<SearchbarChangeEventDetail>, loadFn: Dispatch<SetStateAction<boolean>>) => { })
 
     const closeModal = () => {
         setIsOpen(false)
@@ -56,12 +57,13 @@ export const SearchModalProvider: FC<SearchModalInterface> = ({ children, search
             address: text
         })
     }
-  
+
     useEffect(() => {
         const searchListener = (e: Event) => {
             const event = e as CustomEvent<SearchbarChangeEventDetail>
-    
-            searchHandler(event)
+
+            setLoading(true)
+            searchHandler(event, setLoading)
         }
 
         searchRef.current?.removeEventListener("ionChange", searchListener)
@@ -87,24 +89,30 @@ export const SearchModalProvider: FC<SearchModalInterface> = ({ children, search
                 </ion-header>
                 <ion-content>
                     {
-                        data.length === 0 ?
+                        loading ?
                             <ion-grid>
-                                <ion-row class="ion-padding ion-justify-content-center">
-                                    <ion-text color="secondary">No Search Results Matches your Query</ion-text>
+                                <ion-row class="ion-justify-content-center ion-padding">
+                                    <ion-spinner />
                                 </ion-row>
                             </ion-grid>
-                            : <ion-list>
-                                {
-                                    data.map((ele, index) => (
-                                        <ion-item key={index} button onClick={() => selectHandler(ele)}>
-                                            <ion-label>
-                                                <h5>{ele.text}</h5>
-                                                <p>{ele.place_name}</p>
-                                            </ion-label>
-                                        </ion-item>
-                                    ))
-                                }
-                            </ion-list>
+                            : data.length === 0 ?
+                                <ion-grid>
+                                    <ion-row class="ion-padding ion-justify-content-center">
+                                        <ion-text color="secondary">No Search Results Matches your Query</ion-text>
+                                    </ion-row>
+                                </ion-grid>
+                                : <ion-list>
+                                    {
+                                        data.map((ele, index) => (
+                                            <ion-item key={index} button onClick={() => selectHandler(ele)}>
+                                                <ion-label>
+                                                    <h5>{ele.text}</h5>
+                                                    <p>{ele.place_name}</p>
+                                                </ion-label>
+                                            </ion-item>
+                                        ))
+                                    }
+                                </ion-list>
                     }
 
 

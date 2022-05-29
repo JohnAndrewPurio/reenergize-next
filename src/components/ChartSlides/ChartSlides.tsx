@@ -6,10 +6,11 @@ import { UserLocationInterface } from "../../context/Location"
 
 import DataChart from "../DataChart"
 
-import "swiper/css"
-import 'swiper/css/navigation'
 import { glossary, units } from "../../api/Solcast/glossary"
 import { roundAccurately } from "../../utils/Numbers"
+
+import "swiper/css"
+import 'swiper/css/navigation'
 
 interface ChartSlidesProps {
     location: UserLocationInterface
@@ -26,6 +27,14 @@ const dateFormatOptions: Intl.DateTimeFormatOptions = { weekday: 'long', year: '
 const ChartSlides: FC<ChartSlidesProps> = ({ slidesData, location }) => {
     const slidesEntries = Object.entries(slidesData)
 
+    const initializeSlide = (swiper: Swiper) => {
+        try {
+            swiper.slideTo(2)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         setTimeout(() => {
             const swiper = new Swiper(".swiper", {
@@ -35,6 +44,8 @@ const ChartSlides: FC<ChartSlidesProps> = ({ slidesData, location }) => {
                     prevEl: ".swiper-button-prev"
                 }
             })
+
+            initializeSlide(swiper)
         }, 0)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

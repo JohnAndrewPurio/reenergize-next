@@ -16,7 +16,15 @@ export const glossary = {
     ghi10: "GHI 10th percentile",
     air_temp: "Air Temperature",
     dni10: "DNI 10th percentile",
-    dni90: "DNI 90th percentile"
+    dni90: "DNI 90th percentile",
+    
+}
+
+export const placeHolders = {
+    tilt: "e.g. 23°",
+    install_date: "Installation Date",
+    loss_factor: "e.g. 5%",
+    azimuth: "e.g. 0° (South) - 180° (North)"
 }
 
 export const units = {
@@ -31,5 +39,7 @@ export const units = {
     ghi10: "W/m2",
     air_temp: "°C",
     dni10: "W/m2",
-    dni90: "W/m2"
+    dni90: "W/m2",
+    tilt: "°",
+    loss_factor: "%"
 }

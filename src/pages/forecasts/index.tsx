@@ -3,18 +3,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { getSunTimes } from '../../utils/Time/suncalc'
 import { getWorldRadiationEstimatedActuals, getWorldRadiationForecasts } from '../../api/Solcast'
 
-import Toolbar from '../../components/Toolbar'
-
 import { useUserLocation } from '../../context/Location'
-import { roundAccurately } from '../../utils/Numbers'
-import { glossary, units } from '../../api/Solcast/glossary'
 import { loadingController } from '@ionic/core'
 import { downloadOutline } from 'ionicons/icons'
-import GetCurrentLocation from '../../components/Home/GetCurrentLocation'
 import { downloadData } from '../../utils/Notifications/downloadData'
-import ChartSlides from '../../components/ChartSlides'
 import { WorldRadiationData } from '../../api/Solcast/constants'
-import DataChart from '../../components/DataChart'
+
+import Toolbar from '../../components/Toolbar'
+import GetCurrentLocation from '../../components/Home/GetCurrentLocation'
+import ChartSlides from '../../components/ChartSlides'
 
 interface ForecastsProps {
   apiUrl: string

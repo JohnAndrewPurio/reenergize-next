@@ -77,6 +77,9 @@ export const getPvPowerForecasts = async (latitude: number, longitude: number, c
 
     if (options) {
         for (let key in options) {
+            if(key === "latitude" || key === "longitude" || key === "capacity")
+                continue
+
             if (!options[key as keyof PVPowerOptions])
                 continue
 
@@ -106,6 +109,9 @@ export const getPvPowerEstimatedActuals = async (latitude: number, longitude: nu
 
     if (options) {
         for (let key in options) {
+            if(key === "latitude" || key === "longitude" || key === "capacity")
+                continue
+                
             if (!options[key as keyof PVPowerOptions])
                 continue
 

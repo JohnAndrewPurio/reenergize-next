@@ -1,7 +1,7 @@
 import { menuController, SearchbarChangeEventDetail } from "@ionic/core"
 import { menu, searchOutline } from "ionicons/icons"
 import { useRouter } from "next/router"
-import { FC, useEffect } from "react"
+import { Dispatch, FC, SetStateAction, useEffect } from "react"
 import { useSearchModal } from "../../context/Search"
 import { useUserInfo } from "../../context/User"
 import { getForwardGeocoding } from "../../api/Mapbox"
@@ -37,16 +37,18 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
         router.push(routes["PROFILE"])
     }
 
-    const searchHandler = async (event: CustomEvent<SearchbarChangeEventDetail>) => {
+    const searchHandler = async (event: CustomEvent<SearchbarChangeEventDetail>, setLoading: Dispatch<SetStateAction<boolean>>) => {
         const { value } = event.detail
 
         if (!value) {
             setSearchResultsData([])
+            setLoading(false)
 
             return
         }
 
         try {
+            setLoading(true)
             const { features } = await getForwardGeocoding(value, apiUrl)
 
             console.log("Search Results:", features)
@@ -56,6 +58,8 @@ const Home: FC<HomeInterface> = ({ menuParameters, apiUrl }) => {
             )
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 

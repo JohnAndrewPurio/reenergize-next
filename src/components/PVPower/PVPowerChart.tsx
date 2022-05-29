@@ -8,7 +8,11 @@ interface PVPowerChartProps extends PVPowerOptions {
     config?: {
         latitude: number,
         longitude: number,
-        capacity: number
+        capacity: number,
+        azimuth?: number,
+        install_date?: string
+        tilt?: number,
+        loss_factor?: number
     }
     apiUrl: string
 }
@@ -70,6 +74,7 @@ const PVPowerChart: FC<PVPowerChartProps> = ({ config, apiUrl }) => {
 
         const retrieveData = async () => {
             const options = {
+                ...config,
                 hours: 72
             }
 
@@ -141,7 +146,7 @@ const PVPowerChart: FC<PVPowerChartProps> = ({ config, apiUrl }) => {
         <>
             {
                 config &&
-                <ion-card class="ion-padding ion-margin">
+                <ion-card class="ion-padding">
                     <div className="chart">
                         <DataChart
                             id="chart"
